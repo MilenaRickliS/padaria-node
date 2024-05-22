@@ -1,0 +1,19 @@
+{
+  "dependencies": {
+    "chai": "^5.1.1",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "firebase": "^10.12.1",
+    "mocha": "^10.4.0"
+  },
+  "name": "padaria-node",
+  "version": "1.0.0",
+  "main": "app.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
