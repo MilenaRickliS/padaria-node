@@ -11,44 +11,19 @@
 </head>
 <body>  
     <header>
-      <div>
-                <div class="logo">
-                    <a href="/home">
-                        <img src="/assets/logo-padaria.png" alt="Logo da Padaria" width="100%"/>
-                    </a>
-                </div>
-
-                <nav id="navbar">
-                    <ul>
-                        <li><a href="/home">Cardápio</a></li>
-                        <li><a href="/conta">Conta</a></li>
-                        <li><a href="/carrinho">c</a></li>
-                    </ul>
-                    <div onClick={showNavbar} class="nav-btn nav-close-btn">
-                        <i class="bi bi-x-lg"></i>
-                    </div>
-                </nav>
-                <div class="btn-contato2">
-                    <a href="/">
-                        <button >Sair</button>
-                    </a>
-                </div> 
-                <div onClick={showNavbar} class="nav-btn">
-                        <i class="bi bi-list"></i>
-                </div>               
-                
-            </div>
-              
+        <nav>
+            <ul class="list"> 
+              <li><a class="a-header" href="/home"><img src="/assets/logo-padaria.png" alt="logo-padaria" width="100px" height="70px"></a></li>             
+              <li><a class="a-header" href="/home">Cardápio</a></li>
+              <li><a class="a-header" href="/carrinho">Carinho</a></li>
+              <li><a class="a-header" href="/conta">Conta</a></li>
+            </ul>
+            
+            <button class="menu">Menu</button>
+        </nav>
+        
     </header>
 
-    <script>
-        `<% 
-        const navbar = document.getElementById('navbar');
-         const navBtn = document.querySelector('.nav-btn');
-         
-         navBtn.addEventListener('click', () => {
-           navbar.classList.toggle('responsive_nav');
-         }); %>`
-    </script>
+    
 </body>
 </html>
