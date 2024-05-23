@@ -6,6 +6,7 @@ const { getApps, initializeApp } = require('firebase/app');
 const { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } = require('firebase/auth');
 
 const fetchProducts = require('./views/api/fetchProducts')
+const fetchProductsId = require('./views/api/fetchProductsId')
 
 
 //configurar EJS como mecanismo de visualização
@@ -77,14 +78,9 @@ app.get('/home', async (req, res) => {
 app.get('/products/:id', async (req, res) => {
     const id = req.params.id;
     const produtos = await fetchProducts('pão');
-    const produto = produtos.find(produto => produto.id === parseInt(id)) || { title: 'Product not found' };
-  
-    if (!produto) {
-      req.flash('error', 'Product not found');
-      res.redirect('/');
-    }
-  
-    res.render('products', { produto });
+    const produto = produtos.find(p => p.id === parseInt(id));
+    
+    res.render('products', { produto: produto }); 
   });
 
    

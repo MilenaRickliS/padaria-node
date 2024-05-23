@@ -36,13 +36,38 @@
                     <p><%= produto.title %></p>
                     <p>R$ <%= produto.price %></p>
                     <br>
-                    <a class='link' href='/products/<%= produto.id %>'>Saiba mais!</a>
+                    <!-- <a href='/products/:<%= produto.id %>'>Saiba mais!</a> -->
                     
                 </li>
            
         <% }); %>
     </ul>
+    <footer>
+      <div>
+          <div>
+              <div class="flex">
+                  <div class="logo-footer">
+                      <img src="/assets/logo-padaria.png" alt="Logotipo Padaria Vitória" width="90px" height="100px"/>
+                  </div>
+                  <div class="bemvindo">
+                    <p>Bem-vindo ao nosso site!</p>
+                    <p>Conheça mais sobre nós ou mande uma mensagem!</p>
+                  </div>
+                  <div class="btn-social">
+                      <a href="#"><button><i class="bi bi-instagram"></i></button></a>
+                      <a href="#"><button><i class="bi bi-whatsapp"></i></button></a>
+                      <a href="#"><button><i class="bi bi-facebook"></i></button></a>
+                  </div>
+              </div>
+          </div>
 
+          <div class="line-footer borda">
+              <p><i class="bi bi-envelope-fill"></i> <a
+                      href="mailto:panificadora_vitoria@hotmail.com">panificadora_vitoria@hotmail.com</a>
+              </p>
+          </div>
+      </div>
+  </footer>  
     
 </body>
 </html>
