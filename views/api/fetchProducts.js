@@ -5,4 +5,4 @@ const fetchProducts = async (query) => {
     return data.results;
   };
   
-  export default fetchProducts;
+module.exports = fetchProducts;

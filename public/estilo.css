@@ -7,8 +7,10 @@ body {
   min-height: 200vh;
   font-size: 0;
   font-family: Helvetica, Verdana, sans-serif;
-  background-image: url(/assets/download\ \(1\).jpg); 
-  background-size: 100%;
+  /* background-image: url(/assets/download\ \(1\).jpg); 
+  background-size: 100%; */
+  background: rgb(222,222,157);
+ 
 }
 
 /* login */
@@ -264,4 +266,35 @@ body {
     display: none;
   }
   
-
+/* cardápio */
+.products {
+  padding: 120px 20px 50px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 50px;
+  list-style: none;
+}
+.products li{
+  background: rgb(255, 255, 255);
+  text-align: center;
+  padding: 30px;
+}
+.products li:hover{
+  box-shadow:5px 5px 5px 5px  #bfc0c0;
+}
+.products li p{
+  color: #000;
+  font-weight: 700;
+}
+.products li a{
+  color: #ffffff;
+  background-color: #3A3B3C;
+  padding: 10px;
+  border-radius: 20px;
+  transition: .2s;
+}
+.products li a:hover{
+  text-decoration: none;
+  background-color: #242526;
+  transform: scale(1.01);
+}

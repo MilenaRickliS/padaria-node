@@ -1,15 +1,16 @@
 {
   "dependencies": {
+    "axios": "^1.7.2",
     "chai": "^5.1.1",
     "ejs": "^3.1.10",
     "express": "^4.19.2",
     "firebase": "^10.12.1",
-    "mocha": "^10.4.0"
+    "mocha": "^10.4.0",
+    "node-fetch": "^3.3.2"
   },
   "name": "padaria-node",
   "version": "1.0.0",
   "main": "app.js",
-  "devDependencies": {},
   "scripts": {
     "test": "mocha"
   },

@@ -5,6 +5,9 @@ const bodyParser = require('body-parser');
 const { getApps, initializeApp } = require('firebase/app');
 const { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } = require('firebase/auth');
 
+const fetchProducts = require('./views/api/fetchProducts')
+
+
 //configurar EJS como mecanismo de visualização
 app.set('view engine', 'ejs'); // extensão dos arquivos
 app.set('views', __dirname + '/views/pages'); //onde estão os arquivos
@@ -45,6 +48,7 @@ app.post('/login', async (req, res) => {
         res.redirect('/home');
     } catch (error) {
         res.send(error.message);
+        res.redirect('/');
     }
 });
 app.post('/cadastrar', async (req, res) => {
@@ -54,21 +58,36 @@ app.post('/cadastrar', async (req, res) => {
         res.redirect('/home');
     } catch (error) {
         res.send(error.message);
+        res.redirect('/cadastrar');
     }
 });
 
 
-app.get('/home', (req, res) => {
+app.get('/home', async (req, res) => {
     const user = auth.currentUser;
-    console.log(user); // Adicione esta linha
+    console.log(user); 
     if (user) {
-        res.render('home', { user: user });
+        const produtos = await fetchProducts('pão');
+        res.render('home', { user: user, produtos });
     } else {
         res.redirect('/');
     }
 });
 
+app.get('/products/:id', async (req, res) => {
+    const id = req.params.id;
+    const produtos = await fetchProducts('pão');
+    const produto = produtos.find(produto => produto.id === parseInt(id)) || { title: 'Product not found' };
+  
+    if (!produto) {
+      req.flash('error', 'Product not found');
+      res.redirect('/');
+    }
+  
+    res.render('products', { produto });
+  });
 
+   
 //subir servidor
 app.listen(port, () =>{
     console.log('Servidor rodando na porta', port)
