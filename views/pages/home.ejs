@@ -29,18 +29,22 @@
           </nav>        
     </header>
     <ul class="products">
-        <% produtos.forEach(function(produto){ %> 
+
+        <li><a href="/products">Saiba mais!</a></li>
+        <!-- <% produtos.forEach(function(produto){ %> 
 
                 <li class="<%= produto.id %>">
                     <img src="<%= produto.thumbnail %>">
                     <p><%= produto.title %></p>
                     <p>R$ <%= produto.price %></p>
                     <br>
-                    <!-- <a href='/products/:<%= produto.id %>'>Saiba mais!</a> -->
+
+                    
+                    <a href='/products/:<%= produto.id %>'>Saiba mais!</a> 
                     
                 </li>
            
-        <% }); %>
+        <% }); %> -->
     </ul>
     <footer>
       <div>

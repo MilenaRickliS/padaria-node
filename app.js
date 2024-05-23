@@ -2,12 +2,11 @@ const express = require('express');
 const app = express();
 const port = 3000;
 const bodyParser = require('body-parser');
-const compression=require('compression')
-app.use(compression())
-const multer=require('multer')
-const upload=multer({storage: multer.memoryStorage()})
-require('dotenv').config()
-const path=require('path');
+
+//Importando as bibliotecas de sessões e cookies
+const session = require('express-session');
+const cookie = require('cookie-parser');
+
 const { getApps, initializeApp } = require('firebase/app');
 const { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } = require('firebase/auth');
 
@@ -23,6 +22,19 @@ app.set('views', __dirname + '/views/pages'); //onde estão os arquivos
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+//configurar o uso da biblioteca cookie-parser
+app.use(cookieParser());
+
+//configurar a sessão 
+app.use(
+    session({
+        secret: 'minhachave', //chave para assinar os cookies da sessão
+        resave: false, //evitar de regravar as sessões sem alterações
+        saveUninitialized: true, //salva sessões não inicializadas (anônimas)
+    })
+);
+
+
 var firebaseConfig = {
     apiKey: "AIzaSyCpJbL-v5bvJDSAfhDSqhvNw--ScMZujvs",
     authDomain: "persistencia-ec152.firebaseapp.com",
@@ -37,22 +49,22 @@ const auth = getAuth(firebaseApp);
 const db = getFirestore(firebaseApp);
 const storage = getStorage(firebaseApp);
 
-let a = db.collection('users')
-app.post('/data', async (req,res) => {
-let docRef = a.doc(req.body.user.name)
-await docRef.set({
-    name: req.body.user.name,
-    photoUrl: req.body.user.photoUrl,
-});
-    res.send('done');
-})
+// let a = db.collection('users')
+// app.post('/data', async (req,res) => {
+// let docRef = a.doc(req.body.user.name)
+// await docRef.set({
+//     name: req.body.user.name,
+//     photoUrl: req.body.user.photoUrl,
+// });
+//     res.send('done');
+// })
 
-app.post('/upload',upload.single('file'),async(req,res)=>{
-    const name = saltedMd5(req.file.originalname, 'SUPER-S@LT!')
-    const fileName = name + path.extname(req.file.originalname)
-    await app.storage.file(fileName).createWriteStream().end(req.file.buffer)
-    res.send('done');
-  })
+// app.post('/upload',upload.single('file'),async(req,res)=>{
+//     const name = saltedMd5(req.file.originalname, 'SUPER-S@LT!')
+//     const fileName = name + path.extname(req.file.originalname)
+//     await app.storage.file(fileName).createWriteStream().end(req.file.buffer)
+//     res.send('done');
+//   })
 
 
 //configurar o estilo que esta na public
@@ -73,7 +85,9 @@ app.get('/cadastrar', (req, res) => {
 app.get('/conta', (req, res) => {
     res.render('conta')
 })
-
+app.get('/products', (req, res) => {
+    res.render('products')
+})
 app.post('/login', async (req, res) => {
     try {
         const userCredential = await signInWithEmailAndPassword(auth, req.body.email, req.body.password);
@@ -107,13 +121,57 @@ app.get('/home', async (req, res) => {
     }
 });
 
-app.get('/products/:id', async (req, res) => {
-    const id = req.params.id;
+app.get('/products', async (req, res) => {
     const produtos = await fetchProducts('pão');
-    const produto = produtos.find(p => p.id === parseInt(id));
+    res.send(`
+        <h1>Lista de Produtos</h1>
+        <ul>
+            ${produtos.map((produto) =>
+                `<li>${produto.title} - ${produto.price}
+                    <a href="/adicionar/${produto.id}">Adicionar ao Carrinho</a>
+                </li>`).join("")}             
+        </ul>
+        <a href="/carrinho">Ver carrinho</a>`
+    )
+})
+
+// app.get('/products/:id', async (req, res) => {
+//     const id = req.params.id;
+//     const produtos = await fetchProducts('pão');
+//     const produto = produtos.find(p => p.id === parseInt(id));
     
-    res.render('products', { produto: produto }); 
-  });
+//     res.render('products', { produto: produto }); 
+//   });
+
+  //rota para adicionar produtos no carrinho 
+app.get('/adicionar/:id', async(req, res) =>{
+    const produtos = await fetchProducts('pão');
+    const id = parseInt(req.params.id);
+    const produto = produtos.find((p) => p.id === id);
+
+    if(produto){
+        req.session.carrinho.push(produto);
+    }
+    res.redirect('/products');
+})
+
+//rota para exibir o carrinho de compras
+app.get('/carrinho', async(req,res) =>{
+    const produtos = await fetchProducts('pão');
+    const carrinho = req.session.carrinho
+    const total = carrinho.reduce((acc, produto) => acc + produto.price, 0)
+
+    res.send(`
+        <h1>Carrinho de Compras</h1>
+        <ul>
+            ${carrinho.map((produto) => `<li>${produto.title} - ${produto.price}</li>`)
+                .join("")}
+        </ul>
+        <p>Total: ${total} </p>
+        <a href="/produtos">Continuar Comprando</a>
+        
+    `);
+})
 
 
    
@@ -121,3 +179,4 @@ app.get('/products/:id', async (req, res) => {
 app.listen(port, () =>{
     console.log('Servidor rodando na porta', port)
 })
+
