@@ -22,8 +22,8 @@ app.set('views', __dirname + '/views/pages'); //onde estão os arquivos
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-//configurar o uso da biblioteca cookie-parser
-app.use(cookieParser());
+// //configurar o uso da biblioteca cookie-parser
+// app.use(cookieParser());
 
 //configurar a sessão 
 app.use(
