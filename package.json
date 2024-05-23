@@ -2,11 +2,16 @@
   "dependencies": {
     "axios": "^1.7.2",
     "chai": "^5.1.1",
+    "compression": "^1.7.4",
+    "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
     "express": "^4.19.2",
     "firebase": "^10.12.1",
+    "firebase-admin": "^12.1.1",
     "mocha": "^10.4.0",
-    "node-fetch": "^3.3.2"
+    "multer": "^1.4.5-lts.1",
+    "node-fetch": "^3.3.2",
+    "salted-md5": "^4.0.8"
   },
   "name": "padaria-node",
   "version": "1.0.0",

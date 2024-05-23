@@ -2,6 +2,12 @@ const express = require('express');
 const app = express();
 const port = 3000;
 const bodyParser = require('body-parser');
+const compression=require('compression')
+app.use(compression())
+const multer=require('multer')
+const upload=multer({storage: multer.memoryStorage()})
+require('dotenv').config()
+const path=require('path');
 const { getApps, initializeApp } = require('firebase/app');
 const { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } = require('firebase/auth');
 
@@ -30,6 +36,24 @@ const firebaseApp = !getApps().length ? initializeApp(firebaseConfig) : getApps(
 const auth = getAuth(firebaseApp);
 const db = getFirestore(firebaseApp);
 const storage = getStorage(firebaseApp);
+
+let a = db.collection('users')
+app.post('/data', async (req,res) => {
+let docRef = a.doc(req.body.user.name)
+await docRef.set({
+    name: req.body.user.name,
+    photoUrl: req.body.user.photoUrl,
+});
+    res.send('done');
+})
+
+app.post('/upload',upload.single('file'),async(req,res)=>{
+    const name = saltedMd5(req.file.originalname, 'SUPER-S@LT!')
+    const fileName = name + path.extname(req.file.originalname)
+    await app.storage.file(fileName).createWriteStream().end(req.file.buffer)
+    res.send('done');
+  })
+
 
 //configurar o estilo que esta na public
 app.use(express.static('public'));
@@ -91,29 +115,7 @@ app.get('/products/:id', async (req, res) => {
     res.render('products', { produto: produto }); 
   });
 
-  app.post('/update', async (req, res) => {
-    const { uid, name, photoUrl } = req.body;
-  
-    try {
-      // Atualizar o nome e a foto do usuário no Firestore
-      await db.collection('users').doc(uid).update({
-        name,
-        photoUrl,
-      });
-  
-      // Se uma nova foto de perfil for enviada, atualize-a no Storage
-      if (photoUrl && photoUrl !== user.photoUrl) {
-        const imageRef = storage.bucket().file(`profile-pictures/${uid}`);
-        await imageRef.delete();
-        await imageRef.save(photoUrl);
-      }
-  
-      res.status(200).send({ message: 'Perfil atualizado com sucesso.' });
-    } catch (error) {
-      console.error(error);
-      res.status(500).send({ error: 'Ocorreu um erro ao atualizar o perfil.' });
-    }
-  });
+
    
 //subir servidor
 app.listen(port, () =>{
