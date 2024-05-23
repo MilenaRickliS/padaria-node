@@ -28,20 +28,47 @@
             </div>
           </nav>        
     </header>
-    <ul class="products">
-        <% produtos.forEach(function(produto){ %> 
+    <div>
 
-                <li class="<%= produto.id %>">
-                    <img src="<%= produto.thumbnail %>">
-                    <p><%= produto.title %></p>
-                    <p>R$ <%= produto.price %></p>
-                    <br>
-                    <!-- <a href='/products/:<%= produto.id %>'>Saiba mais!</a> -->
-                    
-                </li>
-           
-        <% }); %>
-    </ul>
+        <div className="content">
+          <span className='title'>Minha Conta</span>
+  
+  
+         <div className="container">
+  
+            <form className="form-profile" action="/update" method="post" >
+                <label className="label-avatar">
+                  <span>
+                    <FiUpload color="#FFF" size={25} />
+                  </span>
+              
+                  <input type="file" accept="image/*" name="photoUrl" /> <br/>
+                  <% if (photoUrl === null) { %>
+                    <img src="/assets/avatar" alt="Foto de perfil" width={250} height={250} />
+                  <% } else { %>
+                    <img src="<%= photoUrl %>" alt="Foto de perfil" width={250} height={250} />
+                  <% } %>
+              
+                </label>
+              
+                <label>Nome</label>
+                <input type="text" name="name" value={nome}/>
+              
+                <label>Email</label>
+                <input type="text" name="email" value={email} disabled={true} />
+                
+                <button type="submit">Salvar</button>
+              </form>
+  
+         </div>
+  
+         <div className="container">
+           <button className="logout-btn">Sair da Conta</button>
+         </div>
+  
+        </div>
+  
+      </div>
     <footer>
       <div>
           <div>

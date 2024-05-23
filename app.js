@@ -6,7 +6,9 @@ const { getApps, initializeApp } = require('firebase/app');
 const { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } = require('firebase/auth');
 
 const fetchProducts = require('./views/api/fetchProducts')
-const fetchProductsId = require('./views/api/fetchProductsId')
+const fetchProductsId = require('./views/api/fetchProductsId');
+const { getStorage } = require('firebase/storage');
+const { getFirestore } = require('firebase/firestore');
 
 
 //configurar EJS como mecanismo de visualização
@@ -26,6 +28,8 @@ var firebaseConfig = {
 
 const firebaseApp = !getApps().length ? initializeApp(firebaseConfig) : getApps()[0];
 const auth = getAuth(firebaseApp);
+const db = getFirestore(firebaseApp);
+const storage = getStorage(firebaseApp);
 
 //configurar o estilo que esta na public
 app.use(express.static('public'));
@@ -40,6 +44,10 @@ app.get('/', (req, res) => {
 
 app.get('/cadastrar', (req, res) => {
     res.render('cadastrar')
+})
+
+app.get('/conta', (req, res) => {
+    res.render('conta')
 })
 
 app.post('/login', async (req, res) => {
@@ -83,6 +91,29 @@ app.get('/products/:id', async (req, res) => {
     res.render('products', { produto: produto }); 
   });
 
+  app.post('/update', async (req, res) => {
+    const { uid, name, photoUrl } = req.body;
+  
+    try {
+      // Atualizar o nome e a foto do usuário no Firestore
+      await db.collection('users').doc(uid).update({
+        name,
+        photoUrl,
+      });
+  
+      // Se uma nova foto de perfil for enviada, atualize-a no Storage
+      if (photoUrl && photoUrl !== user.photoUrl) {
+        const imageRef = storage.bucket().file(`profile-pictures/${uid}`);
+        await imageRef.delete();
+        await imageRef.save(photoUrl);
+      }
+  
+      res.status(200).send({ message: 'Perfil atualizado com sucesso.' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send({ error: 'Ocorreu um erro ao atualizar o perfil.' });
+    }
+  });
    
 //subir servidor
 app.listen(port, () =>{
