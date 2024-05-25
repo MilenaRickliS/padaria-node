@@ -2,16 +2,20 @@ const express = require('express');
 const app = express();
 const port = 3000;
 const bodyParser = require('body-parser');
+app.use(bodyParser.json());
 
 //Importando as bibliotecas de sessões e cookies
 const session = require('express-session');
-const cookie = require('cookie-parser');
+const cookieParser = require('cookie-parser');
+//configurar o uso da biblioteca cookie-parser
+app.use(cookieParser());
 
 const { getApps, initializeApp } = require('firebase/app');
 const { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } = require('firebase/auth');
 
 const fetchProducts = require('./views/api/fetchProducts')
 const fetchProductsId = require('./views/api/fetchProductsId');
+
 const { getStorage } = require('firebase/storage');
 const { getFirestore } = require('firebase/firestore');
 
@@ -122,49 +126,72 @@ app.get('/home', async (req, res) => {
 });
 
 
-app.get('/products/:id', async (req, res) => {
+let cartItems = [];
+
+app.get('/add-to-cart/:id', async (req, res) => {
     const id = req.params.id;
-    const produtos = await fetchProducts('pão');
-    const produto = produtos.find(p => p.id === parseInt(id));
-    
-    res.render('products', { produto: produto }); 
+    const { title, thumbnail, price } = req.body;
+    const existingItem = cartItems.find((item) => item.id === id);
+    if (existingItem) {
+      existingItem.quantity++;
+      res.redirect('/home');
+    } else {
+      cartItems.push({ id: produto.id, title: produto.title, thumbnail: produto.thumbnail, price: produto.price, quantity: 1 });
+      res.redirect('/home');
+    }
   });
 
-  //rota para adicionar produtos no carrinho 
-app.get('/adicionar/:id', async(req, res) =>{
-    const produtos = await fetchProducts('pão');
-    console.log(id)
-    const id = parseInt(req.params.id);
-    const produto = produtos.find((p) => p.id === id);
-
-    if(produto){
-        if(!req.session.carrinho){
-            req.session.carrinho = []
-        }
-        req.session.carrinho.push(produto);
+app.get('/remove-from-cart/:id', (req, res) => {
+  const id = req.params.id;
+  const existingItem = cartItems.find((item) => item.id === id);
+  if (existingItem) {
+    if (existingItem.quantity === 1) {
+      cartItems = cartItems.filter((item) => item.id !== id);
+      res.redirect('/carrinho');
+    } else {
+      existingItem.quantity--;
+      res.redirect('/carrinho');
     }
-    res.redirect('/home');
-})
+  }
+});
 
-//rota para exibir o carrinho de compras
-app.get('/carrinho', async(req,res) =>{
-    const produtos = await fetchProducts('pão');
-    const carrinho = req.session.carrinho || []
-    const total = carrinho.reduce((acc, produto) => acc + produto.price, 0)
+// app.get('/adicionar/:id', async (req, res) =>{
+//     const id = (req.params.id);
+//   console.log(id); // Check the value of id
+//   if (!id) {
+//     // Handle the case where id is null or undefined
+//     res.status(400).send('Invalid product ID');
+//     return;
+//   }
+//   const produto = await fetchProductsId(id);
+  
+//   if (!req.session.carrinho) {
+//     req.session.carrinho = [];
+//   }
+  
+//   const existingItem = req.session.carrinho.find((item) => item.id === id);
+  
+//   if (existingItem) {
+//       existingItem.quantity++;
+//       res.redirect('/home');
+//   } else {
+//       req.session.carrinho.push({ id: produto.id, title: produto.title, thumbnail: produto.thumbnail, price: produto.price, quantity: 1 });
+//       res.redirect('/home');
+//   }
+//   })
 
-    res.send(`
-        <h1>Carrinho de Compras</h1>
-        <ul>
-            ${carrinho.map((produto) => `<li>${produto.title} - ${produto.price}</li>`)
-                .join("")}
-        </ul>
-        <p>Total: ${total} </p>
-        <a href="/home">Continuar Comprando</a>
-        
-    `);
-})
+// app.get('/carrinho', (req,res) =>{
+//     const carrinho = req.session.carrinho || []
+//     const total = carrinho.reduce((acc, produto) => acc + produto.price * produto.quantity, 0)
+
+//     res.render('carrinho', { carrinho: carrinho, total: total });
+// })
 
 
+app.get('/carrinho', (req, res) => {
+    const total = cartItems.reduce((acc, produto) => acc + produto.price, 0)
+    res.render('carrinho', { cartItems: cartItems, total: total })
+  });
    
 //subir servidor
 app.listen(port, () =>{
