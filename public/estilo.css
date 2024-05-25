@@ -4,7 +4,7 @@
 }
 body {
   margin: 0;
-  min-height: 200vh;
+
   font-size: 0;
   font-family: Helvetica, Verdana, sans-serif;
   /* background-image: url(/assets/download\ \(1\).jpg); 
@@ -19,7 +19,10 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #ebc611;
+    /* background-color: #ebc611; */
+    background-image: url(https://i.pinimg.com/originals/91/76/7e/91767e5c622b91fac5d8b69828f49600.gif);
+    background-repeat: no-repeat;
+    background-color: #a1cbc7;
     position: absolute;
     width: 100%;
     text-align: center;
@@ -27,8 +30,10 @@ body {
   }
   
   .login{
-    background-color: #e2d7a0;
-    width: 600px;
+    border-radius: 50px;
+    background-color: #eeebdd;
+    opacity: 0.9;
+    width: 500px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -36,7 +41,7 @@ body {
   }
   
   .login-area{
-    background-color: #e9e9b8;
+    border-radius: 50px;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -64,7 +69,7 @@ body {
   .login input{
     margin-bottom: 1rem;
     height: 35px;
-    border-radius: 4px;
+    border-radius: 30px;
     border:0;
     padding: 10px;
     font-size: 15px;
@@ -74,7 +79,7 @@ body {
   form button{
     height: 35px;
     border:0;
-    border-radius: 4px;
+    border-radius: 20px;
     background-color: #e9e9b8;
     color: #000;
     font-size: 1.3rem;
@@ -107,7 +112,7 @@ body {
     z-index: 99;
     width: 100%;
     
-    background: #242526;
+    background: #ffffff;
   }
   nav .wrapper{
     position: relative;
@@ -121,7 +126,7 @@ body {
     justify-content: space-between;
   }
   .wrapper .logo a{
-    color: #f2f2f2;
+    color: #2e2d2d;
     font-size: 30px;
     font-weight: 600;
     text-decoration: none;
@@ -133,7 +138,7 @@ body {
     list-style: none;
   }
   .nav-links li a{
-    color: #f2f2f2;
+    color: #2d2d2d;
     text-decoration: none;
     font-size: 18px;
     font-weight: 500;
@@ -142,14 +147,14 @@ body {
     transition: all 0.3s ease;
   }
   .nav-links li a:hover{
-    background: #3A3B3C;
+    background: #ffffe2;
   }
   .nav-links .mobile-item{
     display: none;
   }
   .nav-links .drop-menu{
     position: absolute;
-    background: #242526;
+    background: #ffffff;
     width: 180px;
     line-height: 45px;
     top: 85px;
@@ -172,7 +177,7 @@ body {
     border-radius: 0px;
   }
   .wrapper .btn{
-    color: #fff;
+    color: #262626;
     font-size: 20px;
     cursor: pointer;
     display: none;
@@ -194,7 +199,7 @@ body {
       max-width: 350px;
       top: 0;
       left: -100%;
-      background: #242526;
+      background: #ffffff;
       display: block;
       padding: 50px 10px;
       line-height: 50px;
@@ -207,10 +212,10 @@ body {
       width: 10px;
     }
     ::-webkit-scrollbar-track {
-      background: #242526;
+      background: #ffffff;
     }
     ::-webkit-scrollbar-thumb {
-      background: #3A3B3C;
+      background: #fff45b;
     }
     #menu-btn:checked ~ .nav-links{
       left: 0%;
@@ -250,7 +255,7 @@ body {
     }
     .nav-links .mobile-item{
       display: block;
-      color: #f2f2f2;
+      color: #2b2929;
       font-size: 20px;
       font-weight: 500;
       padding-left: 20px;
@@ -306,7 +311,7 @@ body {
 footer {
   padding: 40px 4%;
   box-shadow: 0 0 40px 10px #ffffff1d;
-  background-color: #242526;
+  background-color: #2f2b2b;
 }
 
 footer .flex {
@@ -361,4 +366,5 @@ footer .line-footer p a {
       display: none;
   }
   }
- 
+
+/* carrossel */

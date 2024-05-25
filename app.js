@@ -121,57 +121,57 @@ app.get('/home', async (req, res) => {
     }
 });
 
-app.get('/products', async (req, res) => {
-    const produtos = await fetchProducts('pão');
-    res.send(`
-        <h1>Lista de Produtos</h1>
-        <ul>
-            ${produtos.map((produto) =>
-                `<li>${produto.title} - ${produto.price}
-                    <a href="/adicionar/${produto.id}">Adicionar ao Carrinho</a>
-                </li>`).join("")}             
-        </ul>
-        <a href="/carrinho">Ver carrinho</a>`
-    )
-})
-
-// app.get('/products/:id', async (req, res) => {
-//     const id = req.params.id;
+// app.get('/products', async (req, res) => {
 //     const produtos = await fetchProducts('pão');
-//     const produto = produtos.find(p => p.id === parseInt(id));
+//     res.send(`
+//         <h1>Lista de Produtos</h1>
+//         <ul>
+//             ${produtos.results.map((produto) =>
+//                 `<li>${produto.title} - ${produto.price}
+//                     <a href="/adicionar/${produto.id}">Adicionar ao Carrinho</a>
+//                 </li>`).join("")}             
+//         </ul>
+//         <a href="/carrinho">Ver carrinho</a>`
+//     )
+// })
+
+app.get('/products/:id', async (req, res) => {
+    const id = req.params.id;
+    const produtos = await fetchProducts('pão');
+    const produto = produtos.find(p => p.id === parseInt(id));
     
-//     res.render('products', { produto: produto }); 
-//   });
+    res.render('products', { produto: produto }); 
+  });
 
   //rota para adicionar produtos no carrinho 
-app.get('/adicionar/:id', async(req, res) =>{
-    const produtos = await fetchProducts('pão');
-    const id = parseInt(req.params.id);
-    const produto = produtos.find((p) => p.id === id);
+// app.get('/adicionar/:id', async(req, res) =>{
+//     const produtos = await fetchProducts('pão');
+//     const id = parseInt(req.params.id);
+//     const produto = produtos.find((p) => p.id === id);
 
-    if(produto){
-        req.session.carrinho.push(produto);
-    }
-    res.redirect('/products');
-})
+//     if(produto){
+//         req.session.carrinho.push(produto);
+//     }
+//     res.redirect('/products');
+// })
 
 //rota para exibir o carrinho de compras
-app.get('/carrinho', async(req,res) =>{
-    const produtos = await fetchProducts('pão');
-    const carrinho = req.session.carrinho
-    const total = carrinho.reduce((acc, produto) => acc + produto.price, 0)
+// app.get('/carrinho', async(req,res) =>{
+//     const produtos = await fetchProducts('pão');
+//     const carrinho = req.session.carrinho
+//     const total = carrinho.reduce((acc, produto) => acc + produto.price, 0)
 
-    res.send(`
-        <h1>Carrinho de Compras</h1>
-        <ul>
-            ${carrinho.map((produto) => `<li>${produto.title} - ${produto.price}</li>`)
-                .join("")}
-        </ul>
-        <p>Total: ${total} </p>
-        <a href="/produtos">Continuar Comprando</a>
+//     res.send(`
+//         <h1>Carrinho de Compras</h1>
+//         <ul>
+//             ${carrinho.map((produto) => `<li>${produto.title} - ${produto.price}</li>`)
+//                 .join("")}
+//         </ul>
+//         <p>Total: ${total} </p>
+//         <a href="/produtos">Continuar Comprando</a>
         
-    `);
-})
+//     `);
+// })
 
 
    

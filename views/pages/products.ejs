@@ -27,7 +27,17 @@
               <label for="menu-btn" class="btn menu-btn"><i class="fas fa-bars"></i></label>
             </div>
           </nav>        
-    </header>
+    </header>   
+
+      <li class="<%= produto.id %>">
+          <img src="<%= produto.thumbnail %>">
+          <p><%= produto.title %></p>
+          <p>R$ <%= produto.price %></p>
+          <br>          
+      </li>
+
+    
+    <a class="voltar" href="/home">Voltar à página de produtos</a>
    
 </body>
 </html>
