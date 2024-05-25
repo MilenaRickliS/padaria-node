@@ -32,7 +32,10 @@
             </div>
           </nav>        
     </header>
-    <div class="container-fluid"> 
+    <br>
+    <br>
+    <br>
+    <div class="container-sm"> 
         <div id="myCarousel" class="carousel slide" data-ride="carousel">
           <!-- Indicators -->
           <ol class="carousel-indicators">
@@ -68,23 +71,27 @@
         </div>
       </div>
 
+    <section class="container-products">
+        <ul class="products">
+            <% produtos.forEach(function(produto){ %> 
+    
+                    <li class="<%= produto.id %>">
+                        <img src="<%= produto.thumbnail %>">
+                        <br>
+                        <br>
+                        <p><%= produto.title %></p>
+                        <p class="price">R$ <%= produto.price %></p>
+                        <br>
+    
+                        
+                        <a href=''>+ carrinho</a> 
+                        
+                    </li>
+               
+            <% }); %>
+        </ul>
+    </section>
    
-    <ul class="products">
-        <% produtos.forEach(function(produto){ %> 
-
-                <li class="<%= produto.id %>">
-                    <img src="<%= produto.thumbnail %>">
-                    <p><%= produto.title %></p>
-                    <p>R$ <%= produto.price %></p>
-                    <br>
-
-                    
-                    <a href='/products/<%= produto.id %>'>Saiba mais!</a> 
-                    
-                </li>
-           
-        <% }); %>
-    </ul>
     <footer>
       <div>
           <div>
