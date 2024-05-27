@@ -1,33 +1,25 @@
 const express = require('express');
 const app = express();
-const port = 3000;
+const port = 3001;
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
-
-//Importando as bibliotecas de sessões e cookies
-const session = require('express-session');
-const cookieParser = require('cookie-parser');
-//configurar o uso da biblioteca cookie-parser
-app.use(cookieParser());
-
-const { getApps, initializeApp } = require('firebase/app');
-const { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } = require('firebase/auth');
-
-const fetchProducts = require('./views/api/fetchProducts')
-
-const { getStorage } = require('firebase/storage');
-const { getFirestore } = require('firebase/firestore');
-
 
 //configurar EJS como mecanismo de visualização
 app.set('view engine', 'ejs'); // extensão dos arquivos
 app.set('views', __dirname + '/views/pages'); //onde estão os arquivos
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+//configurar o estilo que esta na public
+app.use(express.static('public'));
+//configurar bodyParser do formulario
+app.use(bodyParser.urlencoded({extended: true}));
 
-// //configurar o uso da biblioteca cookie-parser
-// app.use(cookieParser());
 
+//Importando as bibliotecas de sessões e cookies
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
+//configurar o uso da biblioteca cookie-parser
+app.use(cookieParser());
 //configurar a sessão 
 app.use(
     session({
@@ -37,6 +29,26 @@ app.use(
     })
 );
 
+const axios = require('axios');
+// const fetchProducts = require('./views/api/fetchProducts')
+// URL da API que queremos acessar
+const url = 'http://localhost:8080/pao';
+axios.get(url)
+.then(response => {
+    // Tratamento bem-sucedido da resposta
+    // console.log(response.data);
+    console.log('sucesso')
+})
+.catch(error => {
+    // Tratamento de erro
+    console.error(`Erro ao acessar a API: ${error}`);
+});
+
+
+const { getApps, initializeApp } = require('firebase/app');
+const { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } = require('firebase/auth');
+const { getStorage } = require('firebase/storage');
+const { getFirestore } = require('firebase/firestore');
 
 var firebaseConfig = {
     apiKey: "AIzaSyCpJbL-v5bvJDSAfhDSqhvNw--ScMZujvs",
@@ -52,29 +64,6 @@ const auth = getAuth(firebaseApp);
 const db = getFirestore(firebaseApp);
 const storage = getStorage(firebaseApp);
 
-// let a = db.collection('users')
-// app.post('/data', async (req,res) => {
-// let docRef = a.doc(req.body.user.name)
-// await docRef.set({
-//     name: req.body.user.name,
-//     photoUrl: req.body.user.photoUrl,
-// });
-//     res.send('done');
-// })
-
-// app.post('/upload',upload.single('file'),async(req,res)=>{
-//     const name = saltedMd5(req.file.originalname, 'SUPER-S@LT!')
-//     const fileName = name + path.extname(req.file.originalname)
-//     await app.storage.file(fileName).createWriteStream().end(req.file.buffer)
-//     res.send('done');
-//   })
-
-
-//configurar o estilo que esta na public
-app.use(express.static('public'));
-
-//configurar bodyParser do formulario
-app.use(bodyParser.urlencoded({extended: true}));
 
 //rota principal 
 app.get('/', (req, res) => {
@@ -88,9 +77,7 @@ app.get('/cadastrar', (req, res) => {
 app.get('/conta', (req, res) => {
     res.render('conta')
 })
-app.get('/products', (req, res) => {
-    res.render('products')
-})
+
 app.post('/login', async (req, res) => {
     try {
         const userCredential = await signInWithEmailAndPassword(auth, req.body.email, req.body.password);
@@ -116,55 +103,53 @@ app.post('/cadastrar', async (req, res) => {
 app.get('/home', async (req, res) => {
     const user = auth.currentUser;
     console.log(user); 
+    const url = "http://localhost:8080/pao"; // Exemplo de URL da API
+    const response = await axios.get(url);
+    const posts = response.data;
     if (user) {
-        const produtos = await fetchProducts('pão');
-        res.render('home', { user: user, produtos });
+       
+        res.render('home', { posts });
     } else {
         res.redirect('/');
     }
 });
 
-const formatCurrency = (price, currency) => {
-    // implement your currency formatting logic here
-    return `R$ ${price.toFixed(2)}`;
-  };
+//rota para adicionar produtos no carrinho 
+app.get('/adicionar/:id', async (req, res) =>{
+    const id = parseInt(req.params.id);
+    const url = "http://localhost:8080/pao"; // Exemplo de URL da API
+    const response = await axios.get(url);
+    const posts = response.data;
+    const produto = posts.find((p) => p.id === id);
+    console.log(id)
+
+    if(produto){
+        if(!req.session.carrinho){
+            req.session.carrinho = []
+        }
+        req.session.carrinho.push(produto);
+    }
+    res.redirect('/home');
+})
+
+app.get('/remover/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+    const carrinho = req.session.carrinho || [];
   
-  const cartItems = []; // your cart items data
-  const isCartVisible = true; // your cart visibility flag
-  
-  app.get('/cart', (req, res) => {
-    const totalPrice = cartItems.reduce((acc, item) => item.price + acc, 0);
-    res.render('cart', { cartItems, isCartVisible, totalPrice, formatCurrency });
-  });
-  
-  app.post('/remove-item', (req, res) => {
-    const itemId = req.body.id;
-    const updatedCartItems = cartItems.filter((item) => item.id !== itemId);
-    cartItems = updatedCartItems;
-    res.redirect('/cart');
-  });
- 
-  app.post('/add-to-cart', async (req, res) => {
-    const p = await fetchProducts('pão');
-    const productId = req.body.productId;
-    const product = p.find(p => p.id === productId);
-    // const product = pp.find(p => p.id === pp.id);
-  
-    if (!product) {
-      return res.status(404).send('Product not found');
+    const indice = carrinho.findIndex((produto) => produto.id === id);
+    if (indice !== -1) {
+      carrinho.splice(indice, 1);
     }
   
-    const existingItemIndex = cartItems.findIndex(item => item.id === productId);
-  
-    if (existingItemIndex !== -1) {
-      cartItems[existingItemIndex].quantity++;
-    } else {
-      cartItems.push({ id: productId, quantity: 1 });
-    }
-  
-    res.redirect('/cart');
+    res.redirect('/carrinho');
   });
 
+app.get('/carrinho', (req, res) => {
+    const carrinho = req.session.carrinho || [];
+    const total = carrinho.reduce((acc, produto) => acc + produto.price, 0);
+  
+    res.render('carrinho', { carrinho, total });
+});
    
 //subir servidor
 app.listen(port, () =>{

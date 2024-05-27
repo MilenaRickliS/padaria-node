@@ -27,7 +27,7 @@
               <ul class="nav-links">
                 <label for="close-btn" class="btn close-btn"><i class="fas fa-times"></i></label>
                 <li><a href="/home">Home</a></li>
-                <li><a href="/cart"><i class="bi bi-cart-fill"></i></a></li>
+                <li><a href="/carrinho"><i class="bi bi-cart-fill"></i></a></li>
                 <li><a href="/conta"><i class="bi bi-person-circle"></i></a></li>
               </ul>
               <label for="menu-btn" class="btn menu-btn"><i class="fas fa-bars"></i></label>
@@ -75,25 +75,19 @@
 
     <section class="container-products">
         <ul class="products">
-            <% produtos.forEach(function(produto){ %> 
-    
-                    <li class="<%= produto.id %>">
-                      <button type="button" class="button__add-cart" data-id="<%= produto.id %>" onclick="addToCart('<%= produto.id %>')">
-                        <i class="bi bi-cart-plus-fill"></i>
-                      </button>
-                      
-                        <img src="<%= produto.thumbnail %>">
-                        <br>
-                        <br>
-                        <p><%= produto.title %></p>
-                        <p class="price">R$ <%= produto.price %></p>
-                        <br>                        
-                    </li>
-               
-            <% }); %>
+          <% posts.forEach(post => { %>
+            <li >
+                <a href="/adicionar/<%= post.id %>" class="button__add-cart"><i class="bi bi-cart-plus-fill"></i></a>
+                <img src="<%= post.image %>" width="200px" height="200px"></img>
+                <br>
+                <br>
+                <p><%= post.name %></p>
+                <p class="price">R$ <%= post.price %></p>
+                
+            </li>
+        <% }); %>
         </ul>
-    </section>
-   
+    </section>   
     <footer>
       <div>
           <div>
@@ -121,20 +115,6 @@
       </div>
   </footer>  
    
-  <script>
-    function addToCart(productId) {
-      const xhr = new XMLHttpRequest();
-      xhr.open('POST', '/add-to-cart');
-      xhr.setRequestHeader('Content-Type', 'application/json');
-      xhr.onload = function() {
-        if (xhr.status === 200) {
-          window.location.href = '/cart';
-        } else {
-          alert('Error adding product to cart');
-        }
-      };
-      xhr.send(JSON.stringify({ productId }));
-    }
-  </script>
+ 
 </body>
 </html>
