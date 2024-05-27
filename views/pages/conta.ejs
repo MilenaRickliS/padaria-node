@@ -40,15 +40,12 @@
   
          <div class="container">
   
-            <form class="form-profile" >
-                <label class="label-avatar">
-                 
-              
-                  <input type="file" accept="image/*" name="photoUrl" /> 
-                  
-                  <img src="/assets/avatar.png" alt="Foto de perfil" width={250} height={250} />            
-  
-                </label>
+          <form class="form-profile" enctype="multipart/form-data">
+            <label class="label-avatar">
+              <input type="file" accept="image/*" />
+              <img src="<%= photoUrl %>" alt="Foto de perfil" width={250} height={250} />
+            </label>
+            
               
                 <label>Nome</label>
                 <input type="text" name="name"/>

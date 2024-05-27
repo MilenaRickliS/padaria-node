@@ -63,7 +63,8 @@ const firebaseApp = !getApps().length ? initializeApp(firebaseConfig) : getApps(
 const auth = getAuth(firebaseApp);
 const db = getFirestore(firebaseApp);
 const storage = getStorage(firebaseApp);
-
+const multer = require('multer');
+const upload = multer({ dest: './uploads/' });
 
 //rota principal 
 app.get('/', (req, res) => {
@@ -74,9 +75,44 @@ app.get('/cadastrar', (req, res) => {
     res.render('cadastrar')
 })
 
-app.get('/conta', (req, res) => {
-    res.render('conta')
-})
+
+app.post('/conta', upload.single('photoUrl'), async (req, res) => {
+    const user = auth.currentUser;
+    const file = req.file;
+    const userId = user.uid;
+    const storageRef = ref(storage, `profile-images/${userId}.jpg`);
+  
+    // Upload file to Firebase Storage
+    uploadBytes(storageRef, file.buffer).then((snapshot) => {
+      console.log('Uploaded a blob or file!');
+  
+      // Update photo URL in Firestore
+      const userRef = db.collection('users').doc(userId);
+      userRef.update({ photoUrl: snapshot.metadata.fullPath });
+  
+      // Update photo URL in session
+      req.session.photoUrl = snapshot.metadata.fullPath;
+  
+      res.redirect('/conta');
+    }).catch((error) => {
+      console.error('Error uploading file:', error);
+      res.status(500).send('Error uploading file');
+    });
+  });
+  
+  app.get('/conta', (req, res) => {
+    const user = auth.currentUser;
+    const userId = user.uid;
+    const userRef = db.collection('users').doc(userId);
+  
+    userRef.get().then((doc) => {
+      const photoUrl = doc.data().photoUrl;
+      res.render('conta', { photoUrl });
+    }).catch((error) => {
+      console.error('Error getting user data:', error);
+      res.status(500).send('Error getting user data');
+    });
+  });
 
 app.post('/login', async (req, res) => {
     try {
