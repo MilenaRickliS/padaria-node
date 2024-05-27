@@ -14,7 +14,6 @@ const { getApps, initializeApp } = require('firebase/app');
 const { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } = require('firebase/auth');
 
 const fetchProducts = require('./views/api/fetchProducts')
-const fetchProductsId = require('./views/api/fetchProductsId');
 
 const { getStorage } = require('firebase/storage');
 const { getFirestore } = require('firebase/firestore');
@@ -125,76 +124,54 @@ app.get('/home', async (req, res) => {
     }
 });
 
-
-let cartItems = [];
-
-app.get('/add-to-cart/:id', async (req, res) => {
-    const id = req.params.id;
-    const { title, thumbnail, price } = req.body;
-    const existingItem = cartItems.find((item) => item.id === id);
-    if (existingItem) {
-      existingItem.quantity++;
-      res.redirect('/home');
-    } else {
-      cartItems.push({ id: produto.id, title: produto.title, thumbnail: produto.thumbnail, price: produto.price, quantity: 1 });
-      res.redirect('/home');
+const formatCurrency = (price, currency) => {
+    // implement your currency formatting logic here
+    return `R$ ${price.toFixed(2)}`;
+  };
+  
+  const cartItems = []; // your cart items data
+  const isCartVisible = true; // your cart visibility flag
+  
+  app.get('/cart', (req, res) => {
+    const totalPrice = cartItems.reduce((acc, item) => item.price + acc, 0);
+    res.render('cart', { cartItems, isCartVisible, totalPrice, formatCurrency });
+  });
+  
+  app.post('/remove-item', (req, res) => {
+    const itemId = req.body.id;
+    const updatedCartItems = cartItems.filter((item) => item.id !== itemId);
+    cartItems = updatedCartItems;
+    res.redirect('/cart');
+  });
+ 
+  app.post('/add-to-cart', async (req, res) => {
+    const p = await fetchProducts('pão');
+    const productId = req.body.productId;
+    const product = p.find(p => p.id === productId);
+    // const product = pp.find(p => p.id === pp.id);
+  
+    if (!product) {
+      return res.status(404).send('Product not found');
     }
+  
+    const existingItemIndex = cartItems.findIndex(item => item.id === productId);
+  
+    if (existingItemIndex !== -1) {
+      cartItems[existingItemIndex].quantity++;
+    } else {
+      cartItems.push({ id: productId, quantity: 1 });
+    }
+  
+    res.redirect('/cart');
   });
 
-app.get('/remove-from-cart/:id', (req, res) => {
-  const id = req.params.id;
-  const existingItem = cartItems.find((item) => item.id === id);
-  if (existingItem) {
-    if (existingItem.quantity === 1) {
-      cartItems = cartItems.filter((item) => item.id !== id);
-      res.redirect('/carrinho');
-    } else {
-      existingItem.quantity--;
-      res.redirect('/carrinho');
-    }
-  }
-});
-
-// app.get('/adicionar/:id', async (req, res) =>{
-//     const id = (req.params.id);
-//   console.log(id); // Check the value of id
-//   if (!id) {
-//     // Handle the case where id is null or undefined
-//     res.status(400).send('Invalid product ID');
-//     return;
-//   }
-//   const produto = await fetchProductsId(id);
-  
-//   if (!req.session.carrinho) {
-//     req.session.carrinho = [];
-//   }
-  
-//   const existingItem = req.session.carrinho.find((item) => item.id === id);
-  
-//   if (existingItem) {
-//       existingItem.quantity++;
-//       res.redirect('/home');
-//   } else {
-//       req.session.carrinho.push({ id: produto.id, title: produto.title, thumbnail: produto.thumbnail, price: produto.price, quantity: 1 });
-//       res.redirect('/home');
-//   }
-//   })
-
-// app.get('/carrinho', (req,res) =>{
-//     const carrinho = req.session.carrinho || []
-//     const total = carrinho.reduce((acc, produto) => acc + produto.price * produto.quantity, 0)
-
-//     res.render('carrinho', { carrinho: carrinho, total: total });
-// })
-
-
-app.get('/carrinho', (req, res) => {
-    const total = cartItems.reduce((acc, produto) => acc + produto.price, 0)
-    res.render('carrinho', { cartItems: cartItems, total: total })
-  });
    
 //subir servidor
 app.listen(port, () =>{
     console.log('Servidor rodando na porta', port)
 })
+
+
+
+
 

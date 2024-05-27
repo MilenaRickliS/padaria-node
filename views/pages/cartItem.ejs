@@ -14,6 +14,7 @@
      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
      <script src="https://kit.fontawesome.com/b8ce1a1ffc.js" crossorigin="anonymous"></script>
+     
 </head>
 <body>  
     <header>
@@ -25,31 +26,28 @@
               <ul class="nav-links">
                 <label for="close-btn" class="btn close-btn"><i class="fas fa-times"></i></label>
                 <li><a href="/home">Home</a></li>
-                <li><a href="/carrinho">Cart</a></li>
-                <li><a href="/conta">Perfil</a></li>
+                <li><a href="/cart"><i class="bi bi-cart-fill"></i></a></li>
+                <li><a href="/conta"><i class="bi bi-person-circle"></i></a></li>
               </ul>
               <label for="menu-btn" class="btn menu-btn"><i class="fas fa-bars"></i></label>
             </div>
           </nav>        
     </header>
-   
-
-    <section>
-        <br>
-        <br>
-        <br>
-        <br>
-        <p>Carrinho de Compras</p>
-        <ul>
-          <% cartItems.forEach(function(produto){ %>
-            <li><%= produto.title%> </li>
-          <% }) %>
-        </ul>
-        <p>Total: <%= total %> </p>
-        <a href="/home">Continuar Comprando</a>
+    <br>
+    <br>
+    <br>
+    <section class="cart-item">
+        <img src="<%= thumbnail %>" alt="imagem do produto" class="cart-item-image" />
+        
+        <div class="cart-item-content">
+          <h3 class="cart-item-title"><%= title %></h3>
+          <h3 class="cart-item-price"><%= formatCurrency(price, 'BRL') %></h3>
+        
+          <button type="button" class="button__remove-item" data-id="<%= id %>">
+            <i class="bi bi-cart-dash-fill"></i>
+          </button>
+        </div>
       </section>
-
-
    
     <footer>
       <div>
