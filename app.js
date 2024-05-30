@@ -110,8 +110,8 @@ app.get('/home', async (req, res) => {
     const response = await axios.get(url);
     const posts = response.data;
     if (user) {
-       
-        res.render('home', { posts });
+        req.session.carrinho = req.session.carrinho || [];
+        res.render('home', { posts , carrinho: req.session.carrinho });
     } else {
         res.redirect('/');
     }
