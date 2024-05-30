@@ -21,7 +21,7 @@
               <ul class="nav-links">
                 <label for="close-btn" class="btn close-btn"><i class="fas fa-times"></i></label>
                 <li><a href="/home">Home</a></li>
-                <li><a href="/cart"><i class="bi bi-cart-fill"></i></a></li>
+                <li><a href="/carrinho"><i class="bi bi-cart-fill"></i></a></li>
                 <li><a href="/conta"><i class="bi bi-person-circle"></i></a></li>
               </ul>
               <label for="menu-btn" class="btn menu-btn"><i class="fas fa-bars"></i></label>
@@ -39,27 +39,16 @@
   
   
          <div class="container">
-  
-          <form class="form-profile" enctype="multipart/form-data">
-            <label class="label-avatar">
-              <input type="file" accept="image/*" />
-              <img src="<%= photoUrl %>" alt="Foto de perfil" width={250} height={250} />
-            </label>
-            
-              
-                <label>Nome</label>
-                <input type="text" name="name"/>
-              
-                <label>Email</label>
-                <input type="text" name="email" disabled={true} /> <br/>
-                
-                <button type="submit">Salvar</button> <br/>
-              </form>
+              <% if (user) { %>
+                <strong>Email do usuário: <%= user.email %></strong>
+              <% } else { %>
+                <strong>Você não está logado.</strong>
+              <% } %>
   
          </div>
   
          <div class="container">
-           <button class="logout-btn">Sair da Conta</button>
+           <a href="/" class="logout-btn">Sair da Conta</a>
          </div>
   
         </div>

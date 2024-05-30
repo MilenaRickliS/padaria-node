@@ -31,7 +31,16 @@
                 <li><a href="/conta"><i class="bi bi-person-circle"></i></a></li>
               </ul>
               <label for="menu-btn" class="btn menu-btn"><i class="fas fa-bars"></i></label>
+              <div>
+                <input type="checkbox" class="checkbox" id="chk" />
+                <label class="label-theme" for="chk">
+                  <i class="fas fa-moon"></i>
+                  <i class="fas fa-sun"></i>
+                  <div class="ball"></div>
+                </label>
+              </div>
             </div>
+        
           </nav>        
     </header>
     <br>
@@ -72,6 +81,7 @@
           </a>
         </div>
       </div>
+      
 
     <section class="container-products">
         <ul class="products">
@@ -115,6 +125,13 @@
       </div>
   </footer>  
    
- 
+  <script>
+    const chk = document.getElementById('chk')
+
+    chk.addEventListener('change', () => {
+      document.querySelector('body').classList.toggle('dark')
+      
+    })
+  </script>
 </body>
 </html>
