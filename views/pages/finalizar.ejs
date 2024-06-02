@@ -61,22 +61,25 @@
             <button class="link" type="submit">Adicionar</button>
             <br>
             <br>
-            <ul className="produtos">
-                {endereco.map((endereco) => (
-                    <li key={endereco.id}>
-                    <strong>{endereco.nome} - {endereco.rua}</strong>
+            <ul class="container-finalizar-resultados">
+                <% endereco.forEach((endereco) => { %>
+                  <li key=<%=endereco.id%>>
+                    <strong><%=endereco.nome%> - <%=endereco.rua%></strong>
                     <br></br><br/>
-                    </li>
-                ))}
-            </ul>
+                    <a class="editar" href="/update/<%= endereco.id %>">Editar Endereço</a>
+                    <a class="excluir" href="/delete/<%= endereco.id %>"><i class="bi bi-trash3-fill"></i></a>
+                    
+                  </li>
+                <% }) %>
+              </ul>
     
         </form>
         <br/>
         <h1 class="Titulo">Adicionar Forma de Pagamento</h1>
-        <form>
-            <select class="select" name="categoria">
+        <form action="/pagamento" method="POST">
+            <select class="select" name="forma">
                 <option value="">Escolha uma forma de pagamento</option>
-                <option value="cartao">Cartão de Crédito</option>
+                <option value="cartão de crédito">Cartão de Crédito</option>
                 <option value="pix">Pix</option>
                 <option value="boleto">Boleto</option>
             </select>
@@ -84,6 +87,19 @@
             <br>
     
             <button class="link" type="submit">Adicionar</button>
+
+            <ul class="container-finalizar-resultados">
+                <% pagamento.forEach((pagamento) => { %>
+                  <li key=<%=pagamento.id%>>
+                    <strong><%=pagamento.forma%></strong>
+                    <br></br><br/>
+                    <a class="editar" href="/updatePagamento/<%= pagamento.id%>">Editar Pagamento</a>
+                    <br></br>
+                    <a class="excluir" href="/deletePagamento/<%=pagamento.id%>"><i class="bi bi-trash3-fill"></i></a>
+                    
+                  </li>
+                <% }) %>
+              </ul>
         </form>
     </section>   
     <footer>

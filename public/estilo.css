@@ -706,7 +706,39 @@ footer .line-footer p a {
   padding: 10px;
 }
 .select{
+  width: 100%;
   border: 1px solid #000;
   background-color: #ffffff;
   padding: 10px;
+}
+.container-finalizar-resultados {
+  max-width: 800px;
+  display: flex;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+.editar{
+  background-color: rgb(219, 138, 0);
+  color: black;
+  border-radius: 15px;
+  padding: 10px;
+  text-decoration: none;
+  transition: .2s;
+}
+.editar:hover{
+  background-color: rgb(255, 157, 0) ;
+  transform: scale(1px);
+  text-decoration: none;
+}
+.excluir{
+  color: rgb(169, 8, 8);
+  font-size: 25px;
+  
+}
+.excluir:hover{
+  color: #5e0606;
+  transform: scale(1.2);
 }

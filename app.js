@@ -46,6 +46,9 @@ axios.get(url)
 });
 
 
+
+const {addDoc, collection,doc, getDocs, updateDoc, deleteDoc} = require('firebase/firestore')
+
 const { getApps, initializeApp } = require('firebase/app');
 const { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } = require('firebase/auth');
 const { getFirestore } = require('firebase/firestore');
@@ -155,19 +158,66 @@ app.get('/carrinho', (req, res) => {
     res.render('carrinho', { carrinho, total });
 });
 
-//rota para adicionar uma postagem
-app.get('/finalizar', (req, res) => {
-    res.render('finalizar');
-})
+app.get('/finalizar', async (req, res) => {
+    const enderecoRef = collection(db, 'endereco');
+    const pagamentoRef = collection(db, 'pagamento');
+  
+    const enderecoSnapshot = await getDocs(enderecoRef);
+    const pagamentoSnapshot = await getDocs(pagamentoRef);
+  
+    const enderecoData = enderecoSnapshot.docs.map((doc) => doc.data());
+    const pagamentoData = pagamentoSnapshot.docs.map((doc) => doc.data());
+  
+    res.render('finalizar', { endereco: enderecoData, pagamento: pagamentoData });
+  });
+
+let endereco = [];
+let pagamento = [];
 
 // Rota para processar o formulário
 app.post('/finalizar', async (req, res) => {
-    const {nome,cep, estado, cidade, rua, numero, complemento, telefone} = req.body;
-    await addDoc(collection(db, 'endereco'), {nome,cep, estado, cidade, rua, numero, complemento, telefone});
-    endereco.push({id, nome, cep, estado, cidade, rua, numero, complemento, telefone});
-    res.status(200).send('Endereço adicionado com sucesso!');
-    res.redirect('/finalizar'); 
+  const {nome,cep, estado, cidade, rua, numero, complemento, telefone} = req.body;
+  await addDoc(collection(db, 'endereco'), {nome,cep, estado, cidade, rua, numero, complemento, telefone});
+  endereco.push({ nome, cep, estado, cidade, rua, numero, complemento, telefone});
+//   res.status(200).send('Endereço adicionado com sucesso!');
+  res.redirect('/finalizar');
 })
+app.get('/delete/:id', async (req, res) => {
+    const id = req.params.id;
+    await deleteDoc(doc(db, 'endereco', id));
+    res.redirect('/finalizar');
+  });
+  
+  app.get('/update/:id', async (req, res) => {
+    const id = req.params.id;
+    const {nome,cep, estado, cidade, rua, numero, complemento, telefone} = req.body;
+    await updateDoc(collection(db, 'endereco', id), {nome,cep, estado, cidade, rua, numero, complemento, telefone});
+    res.redirect('/finalizar');
+  });
+
+
+// Rota para processar o formulário
+app.post('/pagamento', async (req, res) => {
+    const forma = req.body;
+    forma.nome = req.body.forma; 
+    await addDoc(collection(db, 'pagamento'), forma);
+    pagamento.push(forma);
+    res.redirect('/finalizar');
+  })
+  app.get('/updatePagamento:id', async (req, res) => {
+    const id = req.params.id;
+    const forma = req.body;
+    await updateDoc(collection(db, 'pagamento', id), forma);
+    res.redirect('/finalizar');
+  })
+  
+  app.get('/deletePagamento/:id', async (req, res) => {
+    const id = req.params.id;
+    console.log(id)
+    await deleteDoc(doc(db, 'pagamento', id));
+    res.redirect('/finalizar');
+  })
+
    
 //subir servidor
 app.listen(port, () =>{
