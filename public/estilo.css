@@ -293,10 +293,7 @@ body.dark {
   height: 26px;
   width: 50px;
   transform: scale(1.5);
-
 }
-
-
 .label-theme .ball {
   background-color: #fff;
   border-radius: 50%;

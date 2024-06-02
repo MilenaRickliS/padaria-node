@@ -126,12 +126,56 @@
   </footer>  
    
   <script>
-    const chk = document.getElementById('chk')
 
-    chk.addEventListener('change', () => {
-      document.querySelector('body').classList.toggle('dark')
-      
-    })
-  </script>
+  class DarkModeToggle {
+    constructor(element) {
+      this.element = element;
+      this.checkbox = element.querySelector('input[type="checkbox"]');
+      this.body = document.querySelector('body');
+
+      this.checkbox.addEventListener('change', this.toggleDarkMode.bind(this));
+    }
+
+    toggleDarkMode() {
+      this.body.classList.toggle('dark');
+    }
+  }
+
+  class DarkModeToggleFactory {
+    createToggle(element) {
+      if (element.tagName === 'DIV') {
+        return new DarkModeToggle(element);
+      } else {
+        throw new Error('Invalid element type');
+      }
+    }
+  }
+
+  const factory = new DarkModeToggleFactory();
+  const toggles = document.querySelectorAll('div');
+
+  toggles.forEach((element) => {
+    factory.createToggle(element);
+  });
+  //   class DarkModeToggle {
+  //   constructor(element) {
+  //     this.element = element;
+  //     this.checkbox = element.querySelector('input[type="checkbox"]');
+  //     this.body = document.querySelector('body');
+
+  //     this.checkbox.addEventListener('change', this.toggleDarkMode.bind(this));
+  //   }
+
+  //   toggleDarkMode() {
+  //     this.body.classList.toggle('dark');
+  //   }
+  // }
+
+  // // Criar múltiplas instâncias da classe
+  // const toggles = document.querySelectorAll('div'); // Selecionar todos os elementos div que contêm a caixa de seleção e o rótulo
+  // toggles.forEach((element) => {
+  //   new DarkModeToggle(element); // Criar uma nova instância da classe para cada elemento
+  // });
+    </script>
 </body>
 </html>

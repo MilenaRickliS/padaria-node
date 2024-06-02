@@ -6,7 +6,7 @@ app.use(bodyParser.json());
 
 
 //configurar EJS como mecanismo de visualização
-app.set('view engine', 'ejs'); // extensão dos arquivos
+app.set('view engine', 'ejs'); 
 app.set('views', __dirname + '/views/pages'); //onde estão os arquivos
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -31,23 +31,18 @@ app.use(
 );
 
 const axios = require('axios');
-// const fetchProducts = require('./views/api/fetchProducts')
-// URL da API que queremos acessar
-const url = 'http://localhost:8080/pao';
+const url = 'http://localhost:8000/pao';
 axios.get(url)
 .then(response => {
-    // Tratamento bem-sucedido da resposta
-    // console.log(response.data);
-    console.log('sucesso')
+    console.log('sucesso');
 })
 .catch(error => {
-    // Tratamento de erro
     console.error(`Erro ao acessar a API: ${error}`);
 });
 
 
 
-const {addDoc, collection,doc, getDocs, getDoc, updateDoc, deleteDoc} = require('firebase/firestore')
+const {addDoc, collection,doc, getDocs, getDoc, updateDoc, deleteDoc} = require('firebase/firestore');
 
 const { getApps, initializeApp } = require('firebase/app');
 const { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } = require('firebase/auth');
@@ -89,7 +84,7 @@ app.get('/conta', (req, res) => {
 app.post('/login', async (req, res) => {
     try {
         const userCredential = await signInWithEmailAndPassword(auth, req.body.email, req.body.password);
-        console.log(userCredential); // Adicione esta linha
+        console.log(userCredential); 
         res.redirect('/home');
     } catch (error) {
         res.send(error.message);
@@ -99,7 +94,7 @@ app.post('/login', async (req, res) => {
 app.post('/cadastrar', async (req, res) => {
     try {
         const userCredential = await createUserWithEmailAndPassword(auth, req.body.email, req.body.password);
-        console.log(userCredential); // Adicione esta linha
+        console.log(userCredential); 
         res.redirect('/home');
     } catch (error) {
         res.send(error.message);
@@ -110,7 +105,7 @@ app.post('/cadastrar', async (req, res) => {
 app.get('/home', async (req, res) => {
     const user = auth.currentUser;
     console.log(user); 
-    const url = "http://localhost:8080/pao"; // Exemplo de URL da API
+    const url = "http://localhost:8000/pao"; 
     const response = await axios.get(url);
     const posts = response.data;
     if (user) {
@@ -124,7 +119,7 @@ app.get('/home', async (req, res) => {
 //rota para adicionar produtos no carrinho 
 app.get('/adicionar/:id', async (req, res) =>{
     const id = parseInt(req.params.id);
-    const url = "http://localhost:8080/pao"; // Exemplo de URL da API
+    const url = "http://localhost:8000/pao"; 
     const response = await axios.get(url);
     const posts = response.data;
     const produto = posts.find((p) => p.id === id);
@@ -132,7 +127,7 @@ app.get('/adicionar/:id', async (req, res) =>{
 
     if(produto){
         if(!req.session.carrinho){
-            req.session.carrinho = []
+            req.session.carrinho = [];
         }
         req.session.carrinho.push(produto);
     }
@@ -242,7 +237,7 @@ app.get('/editarPagamento/:id', async (req, res) => {
 });
 
    
-//subir servidor
+
 app.listen(port, () =>{
     console.log('Servidor rodando na porta', port)
 })
