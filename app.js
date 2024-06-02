@@ -48,7 +48,6 @@ axios.get(url)
 
 const { getApps, initializeApp } = require('firebase/app');
 const { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } = require('firebase/auth');
-const { getStorage } = require('firebase/storage');
 const { getFirestore } = require('firebase/firestore');
 
 var firebaseConfig = {
@@ -63,9 +62,7 @@ var firebaseConfig = {
 const firebaseApp = !getApps().length ? initializeApp(firebaseConfig) : getApps()[0];
 const auth = getAuth(firebaseApp);
 const db = getFirestore(firebaseApp);
-const storage = getStorage(firebaseApp);
-const multer = require('multer');
-const upload = multer({ dest: './uploads/' });
+
 
 //rota principal 
 app.get('/', (req, res) => {
@@ -80,7 +77,6 @@ app.get('/conta', (req, res) => {
     const user = auth.currentUser;
     res.render('conta', {user: user})
 })  
-
 
 app.post('/login', async (req, res) => {
     try {
@@ -153,6 +149,20 @@ app.get('/carrinho', (req, res) => {
   
     res.render('carrinho', { carrinho, total });
 });
+
+//rota para adicionar uma postagem
+app.get('/finalizar', (req, res) => {
+    res.render('finalizar');
+})
+
+// Rota para processar o formulário
+app.post('/finalizar', async (req, res) => {
+    const {nome,cep, estado, cidade, rua, numero, complemento, telefone} = req.body;
+    await addDoc(collection(db, 'endereco'), {nome,cep, estado, cidade, rua, numero, complemento, telefone});
+    endereco.push({id, nome, cep, estado, cidade, rua, numero, complemento, telefone});
+    res.status(200).send('Endereço adicionado com sucesso!');
+    res.redirect('/finalizar'); 
+})
    
 //subir servidor
 app.listen(port, () =>{

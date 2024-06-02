@@ -18,53 +18,58 @@
      
 </head>
 <body>  
-    <header>
-        <nav>
-            <div class="wrapper">
-              <div class="logo"><a href="/home"><img src="/assets/logo-padaria.png" width="100px" height="70px"></a></div>
-              <input type="radio" name="slider" id="menu-btn">
-              <input type="radio" name="slider" id="close-btn">
-              <ul class="nav-links">
-                <label for="close-btn" class="btn close-btn"><i class="fas fa-times"></i></label>
-                <li><a href="/home">Home</a></li>
-                <li class="cart-link"><a href="/carrinho"><span class="cart-status"><%= carrinho.length %></span><i class="bi bi-cart-fill"></i></a></li>
-                <li><a href="/conta"><i class="bi bi-person-circle"></i></a></li>
-              </ul>
-              <label for="menu-btn" class="btn menu-btn"><i class="fas fa-bars"></i></label>
-            </div>
-          </nav>        
-    </header>
-    <br>
-    <br>
-    <br>
-    <section>
-        <div class="cart">
-            <h1>Carrinho de Compras</h1>
-            <ul>
-            <% carrinho.forEach((produto) => { %>
-                <li class="cart-item">
-                    <img class="cart-item-image" src="<%= produto.image %>"  width="100px" height="100px"/>
-                    <div class="cart-item-content">
-                        <h3 class="cart-item-title"> <%= produto.name %></h3>        
-                        <h3 class="cart-item-price">R$ <%= produto.price %></h3>
-                
-                        <a href="/remover/<%= produto.id%>"
-                          class="button__remove-item"
-                        > <i class="bi bi-cart-dash-fill"></i>       
-                        </a>
-                                
-                      </div>
-                </li>
-            <% }); %>
-            </ul>
-            <p class="cart-resume">Total: <%= total %></p>
-            <div class="cart-flex">
-                <a href="/home" class="cart-button">Continuar Comprando</a>
-                <a href="/finalizar" class="cart-button-finalizar">Finalizar Compra</a>
-            </div>
+    <a href="/carrinho" class="cart-button">Continuar Comprando</a>
+    <section class="container-products">
+        <h1 class="Titulo">Adicionar Endereço</h1>
+        <form class='finalizar' action="/finalizar" method="POST">
+            <label for="nome">Nome Completo:</label>
+            <input type="text" name="nome" id="nome" required>    
+            <br>    
+            <label for="cep">CEP:</label>
+            <input type="number" name="cep" id="cep" required>    
+            <br>
+            <br>    
+            <label for="Estado">Estado:</label>
+            <input type="text" name="estado" id="estado" required>    
+            <br>
+            <br>    
+            <label for="cidade">Cidade:</label>
+            <input type="text" name="cidade" id="cidade" required>    
+            <br>
+            <br>    
+            <label for="rua">Rua/Avenida:</label>
+            <input type="text" name="rua" id="rua" required>    
+            <br>
+            <br>    
+            <label for="numero">Número:</label>
+            <input type="number" name="numero" id="numero" required>    
+            <br>
+            <br>    
+            <label for="complemento">Complemento:</label>
+            <input type="text" name="complemento" id="complemento" required>    
+            <br>
+            <br>    
+            <label for="telefone">Telefone:</label>
+            <input type="number" name="telefone" id="telefone" required>    
+            <br>
+    
             
-        </div>
-        
+    
+            <br>
+    
+            <button class="link" type="submit">Adicionar</button>
+            <br>
+            <br>
+            <ul className="produtos">
+                {endereco.map((endereco) => (
+                    <li key={endereco.id}>
+                    <strong>{endereco.nome} - {endereco.rua}</strong>
+                    <br></br><br/>
+                    </li>
+                ))}
+            </ul>
+    
+        </form>
     </section>   
     <footer>
       <div>
@@ -93,6 +98,13 @@
       </div>
   </footer>  
    
- 
+  <script>
+    const chk = document.getElementById('chk')
+
+    chk.addEventListener('change', () => {
+      document.querySelector('body').classList.toggle('dark')
+      
+    })
+  </script>
 </body>
 </html>
