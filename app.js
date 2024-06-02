@@ -75,7 +75,12 @@ app.get('/cadastrar', (req, res) => {
 
 app.get('/conta', (req, res) => {
     const user = auth.currentUser;
-    res.render('conta', {user: user})
+    if (user) {
+        req.session.carrinho = req.session.carrinho || [];
+        res.render('conta', { user: user, carrinho: req.session.carrinho });
+    } else {
+        res.redirect('/');
+    }
 })  
 
 app.post('/login', async (req, res) => {

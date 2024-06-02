@@ -18,8 +18,9 @@
      
 </head>
 <body>  
-    <a href="/carrinho" class="cart-button">Continuar Comprando</a>
-    <section class="container-products">
+    
+    <section class="container-finalizar">
+        <a href="/carrinho" class="cart-button">Continuar Comprando</a>
         <h1 class="Titulo">Adicionar Endereço</h1>
         <form class='finalizar' action="/finalizar" method="POST">
             <label for="nome">Nome Completo:</label>
@@ -69,6 +70,20 @@
                 ))}
             </ul>
     
+        </form>
+        <br/>
+        <h1 class="Titulo">Adicionar Forma de Pagamento</h1>
+        <form>
+            <select class="select" name="categoria">
+                <option value="">Escolha uma forma de pagamento</option>
+                <option value="cartao">Cartão de Crédito</option>
+                <option value="pix">Pix</option>
+                <option value="boleto">Boleto</option>
+            </select>
+    
+            <br>
+    
+            <button class="link" type="submit">Adicionar</button>
         </form>
     </section>   
     <footer>

@@ -690,3 +690,23 @@ footer .line-footer p a {
     font-size: 10px;
   }
 }
+
+/* finalizar */
+.container-finalizar {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+.finalizar input {
+  border-radius: 15px;
+  width: 100%;
+  padding: 10px;
+}
+.select{
+  border: 1px solid #000;
+  background-color: #ffffff;
+  padding: 10px;
+}
