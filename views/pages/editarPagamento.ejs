@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/assets/logo-padaria.png" />
+    <title>Panificadora Vitória - pães para toda a família</title>
+    <link rel="stylesheet" type="text/css" href="/estilo.css">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+     <!-- BOOTSTRAP ICONS -->
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+     <script src="https://kit.fontawesome.com/b8ce1a1ffc.js" crossorigin="anonymous"></script>
+     
+     
+</head>
+<body>  
+    
+    <section class="container-finalizar">
+        <a href="/finalizar" class="cart-button">Voltar</a>
+        <h1 class="Titulo">Editar Forma de Pagamento</h1>
+        <form action="/updatePagamento/<%= pagamento.id%>" method="POST">
+          <select class="select" name="forma">
+            <option value="">Escolha uma forma de pagamento</option>
+            <option value="cartão de crédito" <%= pagamento.forma === 'cartão de crédito'? 'elected' : '' %>>Cartão de Crédito</option>
+            <option value="pix" <%= pagamento.forma === 'pix'? 'elected' : '' %>>Pix</option>
+            <option value="boleto" <%= pagamento.forma === 'boleto'? 'elected' : '' %>>Boleto</option>
+          </select>
+          <br>
+          <button type="submit">Editar Pagamento</button>
+        </form>
+      </section>  
+    <footer>
+      <div>
+          <div>
+              <div class="flex">
+                  <div class="logo-footer">
+                      <img src="/assets/logo-padaria.png" alt="Logotipo Padaria Vitória" width="90px" height="100px"/>
+                  </div>
+                  <div class="bemvindo">
+                    <p>Bem-vindo ao nosso site!</p>
+                    <p>Conheça mais sobre nós ou mande uma mensagem!</p>
+                  </div>
+                  <div class="btn-social">
+                      <a href="#"><button><i class="bi bi-instagram"></i></button></a>
+                      <a href="#"><button><i class="bi bi-whatsapp"></i></button></a>
+                      <a href="#"><button><i class="bi bi-facebook"></i></button></a>
+                  </div>
+              </div>
+          </div>
+
+          <div class="line-footer borda">
+              <p><i class="bi bi-envelope-fill"></i> <a
+                      href="mailto:panificadora_vitoria@hotmail.com">panificadora_vitoria@hotmail.com</a>
+              </p>
+          </div>
+      </div>
+  </footer>  
+   
+  
+</body>
+</html>

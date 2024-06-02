@@ -47,7 +47,7 @@ axios.get(url)
 
 
 
-const {addDoc, collection,doc, getDocs, updateDoc, deleteDoc} = require('firebase/firestore')
+const {addDoc, collection,doc, getDocs, getDoc, updateDoc, deleteDoc} = require('firebase/firestore')
 
 const { getApps, initializeApp } = require('firebase/app');
 const { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } = require('firebase/auth');
@@ -188,10 +188,18 @@ app.get('/delete/:id', async (req, res) => {
     res.redirect('/finalizar');
   });
   
-  app.get('/update/:id', async (req, res) => {
+  app.get('/editar/:id', async (req, res) =>{
     const id = req.params.id;
+    const enderecoRef = doc(db, 'endereco', id);
+    const enderecoSnapshot = await getDoc(enderecoRef);
+    const enderecoDataID = enderecoSnapshot.data();
+    res.render('editar', { endereco: enderecoDataID });
+  });
+  app.post('/update/:id', async (req, res) => {
+    const id = req.params.id;
+    const enderecoRef = doc(db, 'endereco', id);
     const {nome,cep, estado, cidade, rua, numero, complemento, telefone} = req.body;
-    await updateDoc(collection(db, 'endereco', id), {nome,cep, estado, cidade, rua, numero, complemento, telefone});
+    await updateDoc(enderecoRef, {nome,cep, estado, cidade, rua, numero, complemento, telefone});
     res.redirect('/finalizar');
   });
 
@@ -204,19 +212,34 @@ app.post('/pagamento', async (req, res) => {
     pagamento.push(forma);
     res.redirect('/finalizar');
   })
-  app.get('/updatePagamento:id', async (req, res) => {
-    const id = req.params.id;
-    const forma = req.body;
-    await updateDoc(collection(db, 'pagamento', id), forma);
-    res.redirect('/finalizar');
-  })
-  
   app.get('/deletePagamento/:id', async (req, res) => {
     const id = req.params.id;
-    console.log(id)
     await deleteDoc(doc(db, 'pagamento', id));
     res.redirect('/finalizar');
-  })
+  });
+  
+//   app.get('/editarPagamento/:id', async (req, res) =>{
+//     const id = req.params.id;
+//     const pagamentoRef = doc(db, 'pagamento', id);
+//     const pagamentoSnapshot = await getDoc(pagamentoRef);
+//     const pagamentoDataID = pagamentoSnapshot.data();
+//     res.render('editarPagamento', { pagamento: pagamentoDataID });
+//   });
+  
+app.get('/editarPagamento/:id', async (req, res) => {
+    const id = req.params.id;
+    const pagamentoRef = doc(db, 'pagamento', id);
+    const pagamentoSnapshot = await getDoc(pagamentoRef);
+    const pagamentoData = pagamentoSnapshot.data();
+    res.render('editarPagamento', { pagamento: pagamentoData });
+  });
+  app.post('/updatePagamento/:id', async (req, res) => {
+    const id = req.params.id;
+    const pagamentoRef = doc(db, 'pagamento', id);
+    const forma = req.body;
+    await updateDoc(pagamentoRef, forma);
+    res.redirect('/finalizar');
+});
 
    
 //subir servidor
