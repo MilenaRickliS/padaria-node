@@ -64,10 +64,14 @@
             <ul class="container-finalizar-resultados">
               <% endereco.forEach((endereco) => { %>
                 <li key=<%=endereco.id%>>
-                  <strong><%=endereco.nome%> - <%=endereco.rua%></strong>
+                  <strong>Nome Completo: <%=endereco.nome%> - Rua/Avenida: <%=endereco.rua%>, número: <%=endereco.numero%></strong><br/>
+                  <strong>Estado: <%=endereco.estado%> - Cidade: <%=endereco.cidade%> - CEP: <%=endereco.cep%></strong><br/>
+                  <strong>Complemento: <%=endereco.complemento%> - Telefone: <%=endereco.telefone%></strong>
                   <br></br><br/>
+                  <div class="botao-finalizar">
                   <a class="editar" href="/editar/<%=endereco.id%>">Editar Endereço</a>
                   <a class="excluir" href='/delete/<%= endereco.id %>'><i class="bi bi-trash3-fill"></i></a>
+                </div>
                 </li>
               <% }) %>
             </ul>
@@ -92,10 +96,11 @@
                   <li key=<%=pagamento.id%>>
                     <strong><%=pagamento.forma.forma%></strong>
                     <br></br><br/>
+                    <div class="botao-finalizar">
                     <a class="editar" href="/editarPagamento/<%=pagamento.id %>">Editar Pagamento</a>
-                    <br></br>
+              
                     <a class="excluir" href="/deletePagamento/<%=pagamento.id%>"><i class="bi bi-trash3-fill"></i></a>
-                    
+                  </div>
                   </li>
                 <% }) %>
               </ul>

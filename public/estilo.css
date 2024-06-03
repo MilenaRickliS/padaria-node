@@ -709,33 +709,58 @@ footer .line-footer p a {
   padding: 10px;
 }
 .container-finalizar-resultados {
+  list-style: none;
   max-width: 800px;
   display: flex;
-  margin: 20px auto;
+  margin: 10px;
   padding: 20px;
   background-color: #fff;
   border-radius: 8px;
+  flex-direction: column;
+ 
+}
+.container-finalizar-resultados li{
+  margin: 10px;
+  padding: 10px;
+  border-radius: 8px;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
+.botao-finalizar{
+  display: flex;
+  justify-content: space-between;
+}
 .editar{
-  background-color: rgb(219, 138, 0);
-  color: black;
+  background-color: rgb(58, 57, 55);
+  color: rgb(255, 255, 255);
   border-radius: 15px;
-  padding: 10px;
+  padding: 9px;
   text-decoration: none;
   transition: .2s;
+  font-size: 15px;
 }
 .editar:hover{
-  background-color: rgb(255, 157, 0) ;
+  background-color: rgb(81, 80, 79) ;
+  color: rgb(253, 253, 253);
   transform: scale(1px);
   text-decoration: none;
 }
 .excluir{
-  color: rgb(169, 8, 8);
-  font-size: 25px;
+  color: rgb(255, 47, 47);
+  font-size: 18px;
   
 }
 .excluir:hover{
-  color: #5e0606;
+  color: #ad0000;
   transform: scale(1.2);
+}
+@media only screen and (max-width: 335px) {
+  .editar{
+    
+    font-size: 10px;
+  }
+  .excluir{
+    color: rgb(255, 47, 47);
+    font-size: 15px;
+    
+  }
 }
