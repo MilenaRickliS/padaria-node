@@ -4,6 +4,7 @@ const port = 3001;
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 
+const uuid = require('uuid');
 
 //configurar EJS como mecanismo de visualização
 app.set('view engine', 'ejs'); 
@@ -42,7 +43,7 @@ axios.get(url)
 
 
 
-const {addDoc, collection,doc, getDocs, getDoc, updateDoc, deleteDoc} = require('firebase/firestore');
+const {addDoc, collection,doc, getDocs, getDoc, updateDoc, deleteDoc, setDoc} = require('firebase/firestore');
 
 const { getApps, initializeApp } = require('firebase/app');
 const { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } = require('firebase/auth');
@@ -153,8 +154,9 @@ app.get('/carrinho', (req, res) => {
     res.render('carrinho', { carrinho, total });
 });
 
+
 app.get('/finalizar', async (req, res) => {
-    const enderecoRef = collection(db, 'endereco');
+    const enderecoRef = collection(db, 'end');
     const pagamentoRef = collection(db, 'pagamento');
   
     const enderecoSnapshot = await getDocs(enderecoRef);
@@ -166,77 +168,121 @@ app.get('/finalizar', async (req, res) => {
     res.render('finalizar', { endereco: enderecoData, pagamento: pagamentoData });
   });
 
-let endereco = [];
-let pagamento = [];
 
-// Rota para processar o formulário
+let pagamento = [];
+let endereco = [];
+
 app.post('/finalizar', async (req, res) => {
   const {nome,cep, estado, cidade, rua, numero, complemento, telefone} = req.body;
-  await addDoc(collection(db, 'endereco'), {nome,cep, estado, cidade, rua, numero, complemento, telefone});
-  endereco.push({ nome, cep, estado, cidade, rua, numero, complemento, telefone});
-//   res.status(200).send('Endereço adicionado com sucesso!');
+  const id = uuid.v4();
+  const enderecoRef = doc(collection(db, 'end'), id);
+  await setDoc(enderecoRef, {id, nome, cep, estado, cidade, rua, numero, complemento, telefone});
+  endereco.push({ id, nome, cep, estado, cidade, rua, numero, complemento, telefone});
   res.redirect('/finalizar');
 })
-app.get('/delete/:id', async (req, res) => {
+
+app.get('/delete/:id', async (req, res) => {  
+    const id = req.params.id;  
+    const enderecoRef = doc(db, 'end', id);
+    const enderecoDoc = await getDoc(enderecoRef);
+    if (enderecoDoc.exists()) {
+      await deleteDoc(enderecoRef);
+      const indice = endereco.findIndex((endereco) => endereco.id === id);
+      endereco.splice(indice, 1);
+      res.redirect('/finalizar');
+    } else {
+      res.status(404).send('Endereço não encontrado');
+    }
+  })
+  app.get('/editar/:id', async (req, res) => {
     const id = req.params.id;
-    await deleteDoc(doc(db, 'endereco', id));
-    res.redirect('/finalizar');
+    const enderecoRef = doc(db, 'end', id);
+    const enderecoDoc = await getDoc(enderecoRef);
+    if (enderecoDoc.exists()) {
+      const enderecoData = enderecoDoc.data();
+      res.render('editar-endereco', { endereco: enderecoData });
+    } else {
+      res.status(404).send('Endereço não encontrado');
+    }
   });
   
-  app.get('/editar/:id', async (req, res) =>{
+  app.post('/editar/:id', async (req, res) => {
     const id = req.params.id;
-    const enderecoRef = doc(db, 'endereco', id);
-    const enderecoSnapshot = await getDoc(enderecoRef);
-    const enderecoDataID = enderecoSnapshot.data();
-    res.render('editar', { endereco: enderecoDataID });
-  });
-  app.post('/update/:id', async (req, res) => {
-    const id = req.params.id;
-    const enderecoRef = doc(db, 'endereco', id);
-    const {nome,cep, estado, cidade, rua, numero, complemento, telefone} = req.body;
-    await updateDoc(enderecoRef, {nome,cep, estado, cidade, rua, numero, complemento, telefone});
-    res.redirect('/finalizar');
+    const enderecoRef = doc(db, 'end', id);
+    const enderecoDoc = await getDoc(enderecoRef, id);
+    if (enderecoDoc.exists()) {
+      const { nome, cep, estado, cidade, rua, numero, complemento, telefone } = req.body;
+      await updateDoc(enderecoRef, {
+        nome,
+        cep,
+        estado,
+        cidade,
+        rua,
+        numero,
+        complemento,
+        telefone,
+      });
+      res.redirect('/finalizar');
+    } else {
+      res.status(404).send('Endereço não encontrado');
+    }
   });
 
 
 // Rota para processar o formulário
+// app.post('/pagamento', async (req, res) => {
+//     const forma = req.body;
+//     forma.nome = req.body.forma; 
+//     await addDoc(collection(db, 'pagamento'), forma);
+//     pagamento.push(forma);
+//     res.redirect('/finalizar');
+//   })
 app.post('/pagamento', async (req, res) => {
     const forma = req.body;
-    forma.nome = req.body.forma; 
-    await addDoc(collection(db, 'pagamento'), forma);
-    pagamento.push(forma);
+    const id = uuid.v4();
+    const pagamentoRef = doc(collection(db, 'pagamento'), id);
+    await setDoc(pagamentoRef, {id, forma});
+    pagamento.push({ id, forma });
     res.redirect('/finalizar');
+})
+app.get('/deletePagamento/:id', async (req, res) => {  
+    const id = req.params.id;  
+    const pagamentoRef = doc(db, 'pagamento', id);
+    const pagamentoDoc = await getDoc(pagamentoRef);
+    if (pagamentoDoc.exists()) {
+      await deleteDoc(pagamentoRef);
+      const indice = pagamento.findIndex((pagamento) => pagamento.id === id);
+      pagamento.splice(indice, 1);
+      res.redirect('/finalizar');
+    } else {
+      res.status(404).send('forma de pagamento não encontrada');
+    }
   })
-  app.get('/deletePagamento/:id', async (req, res) => {
-    const id = req.params.id;
-    await deleteDoc(doc(db, 'pagamento', id));
-    res.redirect('/finalizar');
-  });
-  
-//   app.get('/editarPagamento/:id', async (req, res) =>{
-//     const id = req.params.id;
-//     const pagamentoRef = doc(db, 'pagamento', id);
-//     const pagamentoSnapshot = await getDoc(pagamentoRef);
-//     const pagamentoDataID = pagamentoSnapshot.data();
-//     res.render('editarPagamento', { pagamento: pagamentoDataID });
-//   });
-  
-app.get('/editarPagamento/:id', async (req, res) => {
+  app.get('/editarPagamento/:id', async (req, res) => {
     const id = req.params.id;
     const pagamentoRef = doc(db, 'pagamento', id);
-    const pagamentoSnapshot = await getDoc(pagamentoRef);
-    const pagamentoData = pagamentoSnapshot.data();
-    res.render('editarPagamento', { pagamento: pagamentoData });
+    const pagamentoDoc = await getDoc(pagamentoRef);
+    if (pagamentoDoc.exists()) {
+      const pagamentoData = pagamentoDoc.data();
+      res.render('editar-pagamento', { pagamento: pagamentoData });
+    } else {
+      res.status(404).send('Forma de pagamento não encontrado');
+    }
   });
-  app.post('/updatePagamento/:id', async (req, res) => {
+  
+  app.post('/editarPagamento/:id', async (req, res) => {
     const id = req.params.id;
     const pagamentoRef = doc(db, 'pagamento', id);
-    const forma = req.body;
-    await updateDoc(pagamentoRef, forma);
-    res.redirect('/finalizar');
-});
-
-   
+    const pagamentoDoc = await getDoc(pagamentoRef);
+    if (pagamentoDoc.exists()) {
+      const pagamentoData = pagamentoDoc.data();
+      pagamentoData.forma.forma = req.body.forma;
+      await updateDoc(pagamentoRef, pagamentoData);
+      res.redirect('/finalizar');
+    } else {
+      res.status(404).send('Forma de pagamento não encontrado');
+    }
+  });
 
 app.listen(port, () =>{
     console.log('Servidor rodando na porta', port)

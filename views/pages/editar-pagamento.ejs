@@ -22,17 +22,19 @@
     <section class="container-finalizar">
         <a href="/finalizar" class="cart-button">Voltar</a>
         <h1 class="Titulo">Editar Forma de Pagamento</h1>
-        <form action="/updatePagamento/<%= pagamento.id%>" method="POST">
-          <select class="select" name="forma">
-            <option value="">Escolha uma forma de pagamento</option>
-            <option value="cartão de crédito" <%= pagamento.forma === 'cartão de crédito'? 'elected' : '' %>>Cartão de Crédito</option>
-            <option value="pix" <%= pagamento.forma === 'pix'? 'elected' : '' %>>Pix</option>
-            <option value="boleto" <%= pagamento.forma === 'boleto'? 'elected' : '' %>>Boleto</option>
-          </select>
-          <br>
-          <button type="submit">Editar Pagamento</button>
+        <form action="/editarPagamento/<%= pagamento.id %>" method="POST">
+            <select class="select" name="forma">
+                <option value="">Escolha uma forma de pagamento</option>
+                <option value="Cartão de Crédito">Cartão de Crédito</option>
+                <option value="Pix">Pix</option>
+                <option value="Boleto">Boleto</option>
+            </select>
+        
+            <br>
+        
+            <button class="link" type="submit">Editar</button>
         </form>
-      </section>  
+    </section> 
     <footer>
       <div>
           <div>

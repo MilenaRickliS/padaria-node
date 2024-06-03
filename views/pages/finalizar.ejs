@@ -62,16 +62,15 @@
             <br>
             <br>
             <ul class="container-finalizar-resultados">
-                <% endereco.forEach((endereco) => { %>
-                  <li key=<%=endereco.id%>>
-                    <strong><%=endereco.nome%> - <%=endereco.rua%></strong>
-                    <br></br><br/>
-                    <a class="editar" href="/editar/<%=endereco.id%>">Editar Endereço</a>
-                    <a class="excluir" href="/delete/<%= endereco.id %>"><i class="bi bi-trash3-fill"></i></a>
-                    
-                  </li>
-                <% }) %>
-              </ul>
+              <% endereco.forEach((endereco) => { %>
+                <li key=<%=endereco.id%>>
+                  <strong><%=endereco.nome%> - <%=endereco.rua%></strong>
+                  <br></br><br/>
+                  <a class="editar" href="/editar/<%=endereco.id%>">Editar Endereço</a>
+                  <a class="excluir" href='/delete/<%= endereco.id %>'><i class="bi bi-trash3-fill"></i></a>
+                </li>
+              <% }) %>
+            </ul>
     
         </form>
         <br/>
@@ -79,9 +78,9 @@
         <form action="/pagamento" method="POST">
             <select class="select" name="forma">
                 <option value="">Escolha uma forma de pagamento</option>
-                <option value="cartão de crédito">Cartão de Crédito</option>
-                <option value="pix">Pix</option>
-                <option value="boleto">Boleto</option>
+                <option value="Cartão de Crédito">Cartão de Crédito</option>
+                <option value="Pix">Pix</option>
+                <option value="Boleto">Boleto</option>
             </select>
     
             <br>
@@ -91,7 +90,7 @@
             <ul class="container-finalizar-resultados">
                 <% pagamento.forEach((pagamento) => { %>
                   <li key=<%=pagamento.id%>>
-                    <strong><%=pagamento.forma%></strong>
+                    <strong><%=pagamento.forma.forma%></strong>
                     <br></br><br/>
                     <a class="editar" href="/editarPagamento/<%=pagamento.id %>">Editar Pagamento</a>
                     <br></br>

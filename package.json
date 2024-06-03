@@ -21,7 +21,8 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-icons": "^5.2.1",
-    "salted-md5": "^4.0.8"
+    "salted-md5": "^4.0.8",
+    "uuid": "^9.0.1"
   },
   "name": "padaria-node",
   "version": "1.0.0",

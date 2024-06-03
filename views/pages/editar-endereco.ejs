@@ -22,42 +22,47 @@
     <section class="container-finalizar">
         <a href="/finalizar" class="cart-button">Voltar</a>
         <h1 class="Titulo">Editar Endereço</h1>
-        <form class='finalizar' action="/update/:id" method="POST">
+        <form action="/editar/<%= endereco.id %>" method="POST">
             <label for="nome">Nome Completo:</label>
-            <input type="text" name="nome" id="nome" required>    
+            <input type="text" name="nome" id="nome" required value="<%= endereco.nome %>">    
             <br>    
             <label for="cep">CEP:</label>
-            <input type="number" name="cep" id="cep" required>    
+            <input type="number" name="cep" id="cep" required value="<%= endereco.cep%>">    
             <br>
             <br>    
             <label for="Estado">Estado:</label>
-            <input type="text" name="estado" id="estado" required>    
+            <input type="text" name="estado" id="estado" required value="<%= endereco.estado %>">    
             <br>
             <br>    
             <label for="cidade">Cidade:</label>
-            <input type="text" name="cidade" id="cidade" required>    
+            <input type="text" name="cidade" id="cidade" required value="<%= endereco.cidade %>">    
             <br>
             <br>    
             <label for="rua">Rua/Avenida:</label>
-            <input type="text" name="rua" id="rua" required>    
+            <input type="text" name="rua" id="rua" required value="<%= endereco.rua %>">    
             <br>
             <br>    
             <label for="numero">Número:</label>
-            <input type="number" name="numero" id="numero" required>    
+            <input type="number" name="numero" id="numero" required value="<%= endereco.numero%>">    
             <br>
             <br>    
             <label for="complemento">Complemento:</label>
-            <input type="text" name="complemento" id="complemento" required>    
+            <input type="text" name="complemento" id="complemento" required value="<%= endereco.complemento %>">    
             <br>
             <br>    
             <label for="telefone">Telefone:</label>
-            <input type="number" name="telefone" id="telefone" required>    
-            <br>    
+            <input type="number" name="telefone" id="telefone" required value="<%= endereco.telefone %>">    
             <br>
     
-            <a class="editar" href="/update/<%= endereco.id %>">Editar Endereço</a>
+            
+    
+            <br>
+    
+            <button class="link" type="submit">Salvar Alterações</button>
     
         </form>
+        
+        
     </section>   
     <footer>
       <div>
