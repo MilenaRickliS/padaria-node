@@ -72,15 +72,7 @@ app.get('/cadastrar', (req, res) => {
     res.render('cadastrar')
 })
 
-app.get('/conta', (req, res) => {
-    const user = auth.currentUser;
-    if (user) {
-        req.session.carrinho = req.session.carrinho || [];
-        res.render('conta', { user: user, carrinho: req.session.carrinho });
-    } else {
-        res.redirect('/');
-    }
-})  
+
 
 app.post('/login', async (req, res) => {
     try {
@@ -154,6 +146,15 @@ app.get('/carrinho', (req, res) => {
     res.render('carrinho', { carrinho, total });
 });
 
+app.get('/conta', (req, res) => {
+  const user = auth.currentUser;
+  if (user) {
+      req.session.carrinho = req.session.carrinho || [];
+      res.render('conta', { user: user, carrinho: req.session.carrinho });
+  } else {
+      res.redirect('/');
+  }
+})  
 
 app.get('/finalizar', async (req, res) => {
     const enderecoRef = collection(db, 'end');
