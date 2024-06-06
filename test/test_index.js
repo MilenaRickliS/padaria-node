@@ -2,7 +2,7 @@ import('chai').then(({ expect }) => {
     const app = require('./app');
   
     describe('App', () => {
-      it('should render index page', () => {
+      it('deve renderizar a página index ', () => {
         const req = {};
         const res = {
           render: (view) => {
@@ -12,7 +12,7 @@ import('chai').then(({ expect }) => {
         app.get('/', (req, res));
       });
   
-      it('should render cadastrar page', () => {
+      it('deve renderizar a página de cadastrar', () => {
         const req = {};
         const res = {
           render: (view) => {

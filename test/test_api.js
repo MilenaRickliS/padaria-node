@@ -3,7 +3,7 @@ import('chai').then(({ expect }) => {
     const nock = require('nock');
   
     describe('App', () => {
-      it('should render home page with posts', () => {
+      it('deve renderizar a página inicial com posts', () => {
         const req = {};
         const res = {
           render: (view, data) => {
