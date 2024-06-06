@@ -1,6 +1,6 @@
 import('chai').then(({ expect }) =>{
-    const app = require('./app');
-describe('Carrinho', () => {
+    const app = require('../app');
+describe('carrinho', () => {
   it('deve adicionar produto ao carrinho', () => {
     const req = { session: {} };
     const res = { redirect: () => {} };
@@ -10,7 +10,7 @@ describe('Carrinho', () => {
   });
 
   it('deve remover produto do carrinho', () => {
-    const req = { session: { carrinho: [{ id: 1, name: 'Product 1' }] } };
+    const req = { session: { carrinho: [{ id: 1, name: 'Pão Italiano' }] } };
     const res = { redirect: () => {} };
     app.get('/remover/:id', (req, res));
     expect(req.session.carrinho).to.be.an('array');
@@ -18,12 +18,12 @@ describe('Carrinho', () => {
   });
 
   it('deve renderizar a página de carrinho', () => {
-    const req = { session: { carrinho: [{ id: 1, name: 'Product 1' }] } };
+    const req = { session: { carrinho: [{ id: 1, name: 'Pão Italiano' }] } };
     const res = { render: () => {} };
     app.get('/carrinho', (req, res));
     expect(res.render).to.have.been.calledWith('carrinho', {
       carrinho: req.session.carrinho,
-      total: 10,
+      total: 15,
     });
   });
 });
