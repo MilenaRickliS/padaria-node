@@ -28,7 +28,7 @@
   "main": "app.js",
   "scripts": {
     "test": "mocha test",
-    "start": "node app"
+    "start": "node app.js"
   },
   "author": "",
   "license": "ISC",

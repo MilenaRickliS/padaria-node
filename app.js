@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
-const port = 3001;
+const host = '0.0.0.0';
+const port = process.env.PORT || 3001;
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 
@@ -285,7 +286,7 @@ app.get('/deletePagamento/:id', async (req, res) => {
     }
   });
 
-app.listen(port, () =>{
+app.listen(port,host, () =>{
     console.log('Servidor rodando na porta', port)
 })
 
