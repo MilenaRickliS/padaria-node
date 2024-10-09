@@ -33,7 +33,7 @@ app.use(
 );
 
 const axios = require('axios');
-const url = 'https://apipao.onrender.com/pao';
+const url = 'http://localhost:8000/pao';
 axios.get(url)
 .then(response => {
     console.log('sucesso');
