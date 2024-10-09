@@ -99,7 +99,7 @@ app.post('/cadastrar', async (req, res) => {
 app.get('/home', async (req, res) => {
     const user = auth.currentUser;
     console.log(user); 
-    const url = "http://localhost:8000/pao"; 
+    const url = "https://apipao.onrender.com/pao"; 
     const response = await axios.get(url);
     const posts = response.data;
     if (user) {
@@ -113,7 +113,7 @@ app.get('/home', async (req, res) => {
 //rota para adicionar produtos no carrinho 
 app.get('/adicionar/:id', async (req, res) =>{
     const id = parseInt(req.params.id);
-    const url = "http://localhost:8000/pao"; 
+    const url = "https://apipao.onrender.com/pao"; 
     const response = await axios.get(url);
     const posts = response.data;
     const produto = posts.find((p) => p.id === id);
